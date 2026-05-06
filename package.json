@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node --watch src/index.js",
     "migrations": "node src/db/postgres/migrations/exec.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky"
@@ -28,6 +28,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "pg": "^8.20.0",
-    "uuid": "^14.0.0"
+    "uuid": "^14.0.0",
+    "validator": "^13.15.35"
   }
 }
