@@ -20,3 +20,10 @@ export function serverError() {
     },
   };
 }
+
+export function ok(body) {
+  return {
+    statusCode: 200,
+    body,
+  };
+}
