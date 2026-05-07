@@ -27,3 +27,10 @@ export function ok(body) {
     body,
   };
 }
+
+export function notFound(body) {
+  return {
+    statusCode: 404,
+    body,
+  };
+}
