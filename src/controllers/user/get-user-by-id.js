@@ -4,29 +4,28 @@ import {
   ok,
   serverError,
   userNotFoundResponse,
-} from "./helpers/index.js";
+} from "../helpers/index.js";
 
-export class DeleteUserController {
-  constructor(deleteUserUseCase) {
-    this.deleteUserUseCase = deleteUserUseCase;
+export class GetUserByIdController {
+  constructor(getUserByIdUseCase) {
+    this.getUserByIdUseCase = getUserByIdUseCase;
   }
 
   async execute(httpRequest) {
     try {
       const userId = httpRequest.params.userId;
-      const idIsValid = checkIfIdIsValid(userId);
-
-      if (!idIsValid) {
+      const isIdValid = checkIfIdIsValid(userId);
+      if (!isIdValid) {
         return invalidIdResponse();
       }
 
-      const deletedUser = await this.deleteUserUseCase.execute(userId);
+      const user = await this.getUserByIdUseCase.execute(userId);
 
-      if (!deletedUser) {
+      if (!user) {
         return userNotFoundResponse();
       }
 
-      return ok(deletedUser);
+      return ok(user);
     } catch (error) {
       console.error(error);
       return serverError();
