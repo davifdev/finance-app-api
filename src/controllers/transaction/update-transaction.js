@@ -15,7 +15,7 @@ export class UpdateTransactionController {
     this.updateTransactionUseCase = updateTransactionUseCase;
   }
 
-  async execyte(httpRequest) {
+  async execute(httpRequest) {
     try {
       const transactionId = httpRequest.params.transactionId;
       const idIsVallid = checkIfIdIsValid(transactionId);
