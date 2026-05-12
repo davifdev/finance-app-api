@@ -12,12 +12,6 @@ export const emailAlreadyInUseResponse = () => {
   });
 };
 
-export const invalidIdResponse = () => {
-  return badRequest({
-    message: "The provided id is not valid.",
-  });
-};
-
 export const userNotFoundResponse = () => {
   return notFound({
     message: "User not found.",
@@ -26,4 +20,3 @@ export const userNotFoundResponse = () => {
 
 export const checkIfPasswordIsValid = password => password.length >= 6;
 export const checkIfEmailIsValid = email => validator.isEmail(email);
-export const checkIfIdIsValid = id => validator.isUUID(id);
