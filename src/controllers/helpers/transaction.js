@@ -1,5 +1,5 @@
 import validator from "validator";
-import { badRequest } from "./http.js";
+import { badRequest, notFound } from "./http.js";
 
 export const checkIfAmountIsValid = amount => {
   console.log(typeof amount !== "number");
@@ -17,6 +17,12 @@ export const checkIfTypeIsValid = type =>
 export const invalidAmountResponse = () => {
   return badRequest({
     message: "The amount must be a valid currency",
+  });
+};
+
+export const transactionNotFoundResponse = () => {
+  return notFound({
+    message: "Transaction not found.",
   });
 };
 
