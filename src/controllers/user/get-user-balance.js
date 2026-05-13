@@ -5,24 +5,23 @@ import {
   invalidIdResponse,
   ok,
   serverError,
-} from "../helpers.js";
+} from "../helpers/index.js";
 
 export class GetUserBalanceController {
-  constructor(getuserBalanceUseCase) {
-    this.getuserBalanceUseCase = getuserBalanceUseCase;
+  constructor(getUserBalanceUseCase) {
+    this.getUserBalanceUseCase = getUserBalanceUseCase;
   }
 
   async execute(httpRequest) {
     try {
       const userId = httpRequest.params.userId;
-
       const isValidId = checkIfIdIsValid(userId);
 
-      if (isValidId) {
+      if (!isValidId) {
         return invalidIdResponse();
       }
 
-      const balance = await this.getuserBalanceUseCase.execute({ userId });
+      const balance = await this.getUserBalanceUseCase.execute({ userId });
 
       return ok(balance);
     } catch (error) {

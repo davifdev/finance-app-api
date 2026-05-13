@@ -4,6 +4,7 @@ import express from "express";
 import {
   makeCreateUserController,
   makeDeleteUserController,
+  makeGetUserBalanceController,
   makeGetUserByIdController,
   makeUpdateUserController,
 } from "./factories/controllers/user.js";
@@ -52,7 +53,6 @@ app.delete("/api/users/:userId", async (request, response) => {
 
 app.post("/api/transaction", async (request, response) => {
   const createTransactionController = makeCreateTransactionController();
-  console.log(await createTransactionController.execute(request));
 
   const { statusCode, body } =
     await createTransactionController.execute(request);
@@ -66,6 +66,14 @@ app.get("/api/transaction", async (request, response) => {
 
   const { statusCode, body } =
     await getTransactionByUserIdController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.get("/api/users/:userId/balance", async (request, response) => {
+  const getUserBalanceController = makeGetUserBalanceController();
+
+  const { statusCode, body } = await getUserBalanceController.execute(request);
 
   response.status(statusCode).json(body);
 });

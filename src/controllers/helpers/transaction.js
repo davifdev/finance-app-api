@@ -2,7 +2,6 @@ import validator from "validator";
 import { badRequest, notFound } from "./http.js";
 
 export const checkIfAmountIsValid = amount => {
-  console.log(typeof amount !== "number");
   if (typeof amount !== "number") return false;
   return validator.isCurrency(amount.toFixed(2), {
     digits_after_decimal: [2],
