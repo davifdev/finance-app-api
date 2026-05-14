@@ -1,15 +1,13 @@
+import { ZodError } from "zod";
 import { EmailAlreadyInUser } from "../../errors/user.js";
 import {
-  checkIfEmailIsValid,
   checkIfIdIsValid,
-  checkIfPasswordIsValid,
-  emailAlreadyInUseResponse,
   invalidIdResponse,
-  invalidPasswordResponse,
   badRequest,
   ok,
   serverError,
 } from "../helpers/index.js";
+import { updateUserSchema } from "../../schemas/user.js";
 
 export class UpdateUserController {
   constructor(updateUserUseCase) {
@@ -18,6 +16,7 @@ export class UpdateUserController {
 
   async execute(httpRequest) {
     try {
+      const params = httpRequest.body;
       const userId = httpRequest.params.userId;
       const isIdValid = checkIfIdIsValid(userId);
 
@@ -25,41 +24,21 @@ export class UpdateUserController {
         return invalidIdResponse();
       }
 
-      const params = httpRequest.body;
-      const allowedFields = ["first_name", "last_name", "email", "password"];
-
-      const someFieldIsNotAllowed = Object.keys(params).some(
-        field => !allowedFields.includes(field),
-      );
-
-      if (someFieldIsNotAllowed) {
-        return badRequest({ message: "Some provided field is not allowed." });
-      }
-
-      if (params.password) {
-        const passwordIsValid = checkIfPasswordIsValid(params.password);
-
-        if (!passwordIsValid) {
-          return invalidPasswordResponse();
-        }
-      }
-
-      if (params.email) {
-        const emailIsValid = checkIfEmailIsValid(params.email);
-
-        if (!emailIsValid) {
-          return emailAlreadyInUseResponse();
-        }
-      }
+      await updateUserSchema.parseAsync(params);
 
       const updateUser = await this.updateUserUseCase.execute(userId, params);
 
       return ok(updateUser);
     } catch (error) {
+      console.error(error);
+      if (error instanceof ZodError) {
+        return badRequest({
+          message: error.issues[0].message,
+        });
+      }
       if (error instanceof EmailAlreadyInUser) {
         return badRequest({ message: error.message });
       }
-      console.error(error);
       return serverError();
     }
   }
