@@ -16,9 +16,9 @@ export class UpdateUserController {
 
   async execute(httpRequest) {
     try {
-      const params = httpRequest.body;
       const userId = httpRequest.params.userId;
       const isIdValid = checkIfIdIsValid(userId);
+      const params = httpRequest.body;
 
       if (!isIdValid) {
         return invalidIdResponse();
@@ -31,6 +31,9 @@ export class UpdateUserController {
       return ok(updateUser);
     } catch (error) {
       console.error(error);
+      if (error.issues[0].code === "unrecognized_keys") {
+        error.issues[0].message = "some provided field is not allowed";
+      }
       if (error instanceof ZodError) {
         return badRequest({
           message: error.issues[0].message,
