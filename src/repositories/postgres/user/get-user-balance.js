@@ -1,3 +1,4 @@
+import { Prisma } from "../../../../generated/prisma/index.js";
 import { prisma } from "../../../../prisma/prisma.js";
 
 // import { PostgresHelper } from "../../../db/postgres/client.js";
@@ -49,15 +50,17 @@ export class PostgresGetUserBalanceRepository {
       },
     });
 
-    const _totalEarnings = totalEarnings || 0;
-    const _totalExpenses = totalExpenses || 0;
-    const _totalInvestment = totalInvestment || 0;
-    const balance = totalEarnings - totalExpenses - totalInvestment;
+    const _totalEarnings = totalEarnings || new Prisma.Decimal(0);
+    const _totalExpenses = totalExpenses || new Prisma.Decimal(0);
+    const _totalInvestment = totalInvestment || new Prisma.Decimal(0);
+    const balance = new Prisma.Decimal(
+      totalEarnings - totalExpenses - totalInvestment,
+    );
 
     return {
-      _totalEarnings,
-      _totalExpenses,
-      _totalInvestment,
+      earnings: _totalEarnings,
+      expense: _totalExpenses,
+      investment: _totalInvestment,
       balance,
     };
   }
