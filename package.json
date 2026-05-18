@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node --watch src/index.js",
     "migrations": "node src/db/postgres/migrations/exec.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:watch": "jest --watch",
+    "test": "jest",
     "prepare": "husky"
   },
   "keywords": [],
@@ -20,6 +21,7 @@
     "git-commit-msg-linter": "^5.0.8",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
+    "jest": "^30.4.2",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3"
   },
