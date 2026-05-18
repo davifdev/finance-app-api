@@ -74,4 +74,19 @@ describe("CreateUserController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 400 if password is not provided", async () => {
+    const createUserUseCase = new CreateUserUseCaseStub();
+    const createUserUseController = new CreateUserController(createUserUseCase);
+
+    const httpRequest = {
+      first_name: "Davi",
+      last_name: "Fernandes",
+      email: "davi@gmail.com",
+    };
+
+    const result = await createUserUseController.execute(httpRequest);
+
+    expect(result.statusCode).toBe(400);
+  });
 });
