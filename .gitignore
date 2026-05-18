@@ -9,3 +9,6 @@ postgres-data
 
 # Prisma
 generated
+
+# Jest
+coverage
