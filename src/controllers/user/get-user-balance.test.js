@@ -29,6 +29,12 @@ describe("GetUserBalanceController", () => {
     },
   };
 
+  const invalidHttpRequest = {
+    params: {
+      userId: "invalid-user-id",
+    },
+  };
+
   it("should return 200 and user balance", async () => {
     const { sut } = makeSut();
 
@@ -41,5 +47,13 @@ describe("GetUserBalanceController", () => {
       INVESTMENT: "0",
       balance: "0",
     });
+  });
+
+  it("should return 400 if userId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute(invalidHttpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });
