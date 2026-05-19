@@ -60,4 +60,16 @@ describe("DeleteUserController", () => {
 
     expect(result.statusCode).toBe(404);
   });
+
+  it("should return 500 if occurs an error", async () => {
+    const { sut, deleteUserUseCase } = makeSut();
+
+    jest.spyOn(deleteUserUseCase, "execute").mockImplementation(() => {
+      throw new Error("Server error");
+    });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
