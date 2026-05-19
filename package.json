@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node --watch src/index.js",
     "migrations": "node src/db/postgres/migrations/exec.js",
-    "test:watch": "jest --watch --passWithNoTests",
-    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests --silent",
+    "test": "jest --passWithNoTests --silent",
     "prepare": "husky"
   },
   "keywords": [],
@@ -18,6 +18,7 @@
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.5",
     "@eslint/js": "^10.0.1",
+    "@faker-js/faker": "^10.4.0",
     "@types/jest": "^30.0.0",
     "babel-jest": "^30.4.1",
     "eslint": "^10.3.0",
