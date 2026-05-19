@@ -22,6 +22,12 @@ describe("DeleteUserController", () => {
     },
   };
 
+  const invalidHttpRequest = {
+    params: {
+      userId: "invalid-id",
+    },
+  };
+
   const makeSut = () => {
     const deleteUserUseCase = new DeleteUserUseCaseStub();
     const sut = new DeleteUserController(deleteUserUseCase);
@@ -35,5 +41,13 @@ describe("DeleteUserController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(200);
+  });
+
+  it("should return 400 if userId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute(invalidHttpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });
