@@ -30,11 +30,25 @@ describe("GetUserByIdController", () => {
     },
   };
 
+  const invalidHttpRequest = {
+    params: {
+      userId: "invalid-user-id",
+    },
+  };
+
   it("should return 200 when getting user by id", async () => {
     const { sut } = makeSut();
 
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(200);
+  });
+
+  it("should return 400 if userId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute(invalidHttpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });
