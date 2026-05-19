@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { CreateUserController } from "./create-user.js";
 
 describe("CreateUserController", () => {
@@ -14,10 +15,10 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        first_name: "Davi",
-        last_name: "Fernandes",
-        email: "davi@gmail.com",
-        password: "123456",
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 7 }),
       },
     };
 
@@ -35,9 +36,9 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        last_name: "Fernandes",
-        email: "davi@gmail.com",
-        password: "123456",
+        last_name: faker.person.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 7 }),
       },
     };
 
@@ -51,9 +52,9 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        first_name: "Davi",
-        email: "davi@gmail.com",
-        password: "123456",
+        first_name: faker.person.firstName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 7 }),
       },
     };
 
@@ -68,9 +69,9 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        first_name: "Davi",
-        last_name: "Fernandes",
-        password: "123456",
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        password: faker.internet.password({ length: 7 }),
       },
     };
 
@@ -85,9 +86,9 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        first_name: "Davi",
-        last_name: "Fernandes",
-        password: "123456",
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        password: faker.internet.password({ length: 7 }),
         email: "incorrect_format",
       },
     };
@@ -103,9 +104,9 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        first_name: "Davi",
-        last_name: "Fernandes",
-        email: "davi@gmail.com",
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        email: faker.internet.email(),
       },
     };
 
@@ -120,10 +121,10 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        first_name: "Davi",
-        last_name: "Fernandes",
-        email: "davi@gmail.com",
-        password: "123",
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 3 }),
       },
     };
 
@@ -138,10 +139,10 @@ describe("CreateUserController", () => {
 
     const httpRequest = {
       body: {
-        first_name: "Davi",
-        last_name: "Fernandes",
-        email: "davi@gmail.com",
-        password: "123456",
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 7 }),
       },
     };
 
@@ -150,5 +151,27 @@ describe("CreateUserController", () => {
     await createUserUseController.execute(httpRequest);
 
     expect(executeSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  it("should return 500 if CreateUserUseCase throws an error", async () => {
+    const createUserUseCase = new CreateUserUseCaseStub();
+    const createUserUseController = new CreateUserController(createUserUseCase);
+
+    const httpRequest = {
+      body: {
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 7 }),
+      },
+    };
+
+    jest.spyOn(createUserUseCase, "execute").mockImplementation(() => {
+      throw new Error("Server error");
+    });
+
+    const result = await createUserUseController.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
   });
 });
