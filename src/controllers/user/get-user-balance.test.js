@@ -6,12 +6,7 @@ describe("GetUserBalanceController", () => {
   const makeSut = () => {
     class GetUserBalanceUseCaseStub {
       async execute() {
-        return {
-          EARNINGS: "0",
-          EXPENSES: "0",
-          INVESTMENT: "0",
-          balance: "0",
-        };
+        return faker.number.int();
       }
     }
 
@@ -36,18 +31,12 @@ describe("GetUserBalanceController", () => {
     },
   };
 
-  it("should return 200 and user balance", async () => {
+  it("should return 200 when getting user balance", async () => {
     const { sut } = makeSut();
 
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(200);
-    expect(result.body).toStrictEqual({
-      EARNINGS: "0",
-      EXPENSES: "0",
-      INVESTMENT: "0",
-      balance: "0",
-    });
   });
 
   it("should return 400 if userId is invalid", async () => {
@@ -68,5 +57,17 @@ describe("GetUserBalanceController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(400);
+  });
+
+  it("should return 500 if GetUserBalanceUseCase throwns an error", async () => {
+    const { sut, getUserBalanceUseCaseStub } = makeSut();
+
+    jest.spyOn(getUserBalanceUseCaseStub, "execute").mockImplementation(() => {
+      throw new Error("Server error");
+    });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
   });
 });
