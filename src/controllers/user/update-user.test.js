@@ -67,4 +67,14 @@ describe("UpdateUserController", () => {
 
     expect(response.statusCode).toBe(404);
   });
+
+  it("should return 500 if ocurs an internal server error", async () => {
+    const { sut, updateUserUseCaseStub } = makeSut();
+
+    jest.spyOn(updateUserUseCaseStub, "execute").mockRejectedValue(new Error());
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
