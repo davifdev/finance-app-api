@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { GetUserByIdController } from "./get-user-by-id";
+import { GetUserByIdController } from "./get-user-by-id.js";
 
 describe("GetUserByIdController", () => {
   const makeSut = () => {
