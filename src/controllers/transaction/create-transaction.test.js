@@ -5,14 +5,8 @@ import { UserNotFoundError } from "../../errors/user";
 describe("CreateTransactionController", () => {
   const makeSut = () => {
     class CreateTransactionUseCaseStub {
-      async execute() {
-        return {
-          user_id: faker.string.uuid(),
-          name: faker.lorem.words(6),
-          date: faker.date.past().toISOString(),
-          type: "EARNING",
-          amount: faker.number.int(),
-        };
+      async execute(transaction) {
+        return transaction;
       }
     }
 
@@ -35,10 +29,38 @@ describe("CreateTransactionController", () => {
     },
   };
 
-  it("should return 201 when transaction is created", async () => {
+  it("should return 201 when transaction is created (EARNING)", async () => {
     const { sut } = makeSut();
 
     const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(201);
+  });
+
+  it("should return 201 when transaction is created (EXPENSE)", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        type: "EXPENSE",
+      },
+    });
+
+    expect(result.statusCode).toBe(201);
+  });
+
+  it("should return 201 when transaction is created (EARNING)", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        type: "INVESTMENT",
+      },
+    });
 
     expect(result.statusCode).toBe(201);
   });
