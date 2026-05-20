@@ -9,10 +9,10 @@ describe("DeleteTransactionController", () => {
       }
     }
 
-    const createTransactionUseCase = new DeleteTransactionControllerStub();
-    const sut = new DeleteTransactionController(createTransactionUseCase);
+    const deleteTransactionUseCase = new DeleteTransactionControllerStub();
+    const sut = new DeleteTransactionController(deleteTransactionUseCase);
 
-    return { createTransactionUseCase, sut };
+    return { deleteTransactionUseCase, sut };
   };
 
   const httpRequest = {
@@ -40,5 +40,15 @@ describe("DeleteTransactionController", () => {
     });
 
     expect(result.statusCode).toBe(400);
+  });
+
+  it("should return 404 if transaction is not found", async () => {
+    const { deleteTransactionUseCase, sut } = makeSut();
+
+    jest.spyOn(deleteTransactionUseCase, "execute").mockResolvedValue(null);
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(404);
   });
 });
