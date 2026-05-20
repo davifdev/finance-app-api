@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { CreateTransactionController } from "./create-transaction";
+import { UserNotFoundError } from "../../errors/user";
 
 describe("CreateTransactionController", () => {
   const makeSut = () => {
@@ -122,5 +123,17 @@ describe("CreateTransactionController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(500);
+  });
+
+  it("should return 400 if user not found", async () => {
+    const { sut, createTransactionUseCase } = makeSut();
+
+    jest.spyOn(createTransactionUseCase, "execute").mockImplementation(() => {
+      throw new UserNotFoundError();
+    });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });
