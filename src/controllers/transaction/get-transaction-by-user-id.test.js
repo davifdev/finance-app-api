@@ -44,4 +44,28 @@ describe("GetTransactionByUserIdController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 404 if transaction are not found", async () => {
+    const { getTransactionByUserIdUseCase, sut } = makeSut();
+
+    jest
+      .spyOn(getTransactionByUserIdUseCase, "execute")
+      .mockResolvedValue(null);
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(404);
+  });
+
+  it("should return 500 if occurs internal server error", async () => {
+    const { getTransactionByUserIdUseCase, sut } = makeSut();
+
+    jest
+      .spyOn(getTransactionByUserIdUseCase, "execute")
+      .mockRejectedValue(new Error());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
