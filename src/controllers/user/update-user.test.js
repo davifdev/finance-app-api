@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { UpdateUserController } from "./update-user.js";
+import { EmailAlreadyInUser } from "../../errors/user.js";
 
 describe("UpdateUserController", () => {
   const makeSut = () => {
@@ -114,6 +115,20 @@ describe("UpdateUserController", () => {
     expect(response.statusCode).toBe(400);
   });
 
+  it("should return 400 if field is not allowed", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      params: httpRequest.params,
+      body: {
+        ...httpRequest.body,
+        not_allowed_field: "not allowed value",
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+  });
+
   it("should return 404 if user is not found", async () => {
     const { sut, updateUserUseCaseStub } = makeSut();
 
@@ -134,5 +149,17 @@ describe("UpdateUserController", () => {
     const response = await sut.execute(httpRequest);
 
     expect(response.statusCode).toBe(500);
+  });
+
+  it("should return 400 if UpdateUserUseCase throws an error", async () => {
+    const { sut, updateUserUseCaseStub } = makeSut();
+
+    jest.spyOn(updateUserUseCaseStub, "execute").mockImplementation(() => {
+      throw new EmailAlreadyInUser(faker.internet.email());
+    });
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(400);
   });
 });
