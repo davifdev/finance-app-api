@@ -5,6 +5,7 @@ import {
   ok,
   requiredFieldIsMissingResponse,
   serverError,
+  transactionNotFoundResponse,
   userNotFoundResponse,
 } from "../helpers/index.js";
 
@@ -30,6 +31,10 @@ export class GetTransactionByUserIdController {
       const transactions = await this.getTransactionByUserIdUseCase.execute({
         user_id: userId,
       });
+
+      if (!transactions) {
+        return transactionNotFoundResponse();
+      }
 
       return ok(transactions);
     } catch (error) {
