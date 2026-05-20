@@ -34,4 +34,17 @@ describe("UpdateTransactionController", () => {
 
     expect(result.statusCode).toBe(200);
   });
+
+  it("should return 200 if type to EXPENSE is updated", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        type: "EXPENSE",
+      },
+    });
+    expect(result.statusCode).toBe(200);
+  });
 });
