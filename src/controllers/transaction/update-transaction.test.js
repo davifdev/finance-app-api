@@ -76,4 +76,32 @@ describe("UpdateTransactionController", () => {
 
     expect(result.statusCode).toBe(200);
   });
+
+  it("should return 400 if some provided field is not allowed", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        someField: "some value",
+      },
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  it("should return 400 if amount is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        amount: "invalid-amount",
+      },
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
 });
