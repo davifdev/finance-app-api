@@ -111,4 +111,16 @@ describe("CreateTransactionController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 500 if ocurs an internal server error", async () => {
+    const { sut, createTransactionUseCase } = makeSut();
+
+    jest.spyOn(createTransactionUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
