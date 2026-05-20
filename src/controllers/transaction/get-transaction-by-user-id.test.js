@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { GetTransactionByUserIdController } from "./get-transaction-by-user-id";
+import { UserNotFoundError } from "../../errors/user";
 
 describe("GetTransactionByUserIdController", () => {
   const makeSut = () => {
@@ -30,6 +31,19 @@ describe("GetTransactionByUserIdController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(200);
+  });
+
+  it("should return 400 if user id is missing", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      query: {
+        userId: undefined,
+      },
+    });
+
+    expect(result.statusCode).toBe(400);
   });
 
   it("should return 400 if user id is invalid", async () => {
@@ -67,5 +81,17 @@ describe("GetTransactionByUserIdController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(500);
+  });
+
+  it("should return 404 if UserNotFoundError is thrown", async () => {
+    const { getTransactionByUserIdUseCase, sut } = makeSut();
+
+    jest
+      .spyOn(getTransactionByUserIdUseCase, "execute")
+      .mockRejectedValue(new UserNotFoundError());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(404);
   });
 });
