@@ -57,4 +57,14 @@ describe("UpdateUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 404 if user is not found", async () => {
+    const { sut, updateUserUseCaseStub } = makeSut();
+
+    jest.spyOn(updateUserUseCaseStub, "execute").mockResolvedValue(null);
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(404);
+  });
 });
