@@ -37,9 +37,9 @@ export class UpdateUserController {
 
       return ok(updateUser);
     } catch (error) {
-      if (error.issues[0].code === "unrecognized_keys") {
-        error.issues[0].message = "some provided field is not allowed";
-      }
+      // if (error.issues[0].code === "unrecognized_keys") {
+      //   error.issues[0].message = "some provided field is not allowed";
+      // }
       if (error instanceof ZodError) {
         return badRequest({
           message: error.issues[0].message,

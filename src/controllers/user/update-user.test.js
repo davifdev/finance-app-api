@@ -50,6 +50,20 @@ describe("UpdateUserController", () => {
     expect(response.statusCode).toBe(200);
   });
 
+  it("should return 400 when a invalid email is provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      params: httpRequest.params,
+      body: {
+        ...httpRequest.body,
+        email: "invalid-email",
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+  });
+
   it("should return 400 if user id is invalid", async () => {
     const { sut } = makeSut();
 
@@ -71,7 +85,9 @@ describe("UpdateUserController", () => {
   it("should return 500 if ocurs an internal server error", async () => {
     const { sut, updateUserUseCaseStub } = makeSut();
 
-    jest.spyOn(updateUserUseCaseStub, "execute").mockRejectedValue(new Error());
+    jest.spyOn(updateUserUseCaseStub, "execute").mockImplementation(() => {
+      throw new Error();
+    });
 
     const response = await sut.execute(httpRequest);
 
