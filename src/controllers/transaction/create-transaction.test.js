@@ -105,7 +105,7 @@ describe("CreateTransactionController", () => {
       ...httpRequest,
       body: {
         ...httpRequest.body,
-        amount: "invalid-amount",
+        amount: "invalid_amount",
       },
     });
 
