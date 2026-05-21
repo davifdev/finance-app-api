@@ -15,11 +15,11 @@ describe("GetUserBalanceController", () => {
       }
     }
 
-    const getUserBalanceUseCaseStub = new GetUserBalanceUseCaseStub();
-    const sut = new GetUserBalanceController(getUserBalanceUseCaseStub);
+    const getUserBalanceUseCase = new GetUserBalanceUseCaseStub();
+    const sut = new GetUserBalanceController(getUserBalanceUseCase);
 
     return {
-      getUserBalanceUseCaseStub,
+      getUserBalanceUseCase,
       sut,
     };
   };
@@ -50,6 +50,16 @@ describe("GetUserBalanceController", () => {
     });
   });
 
+  it("should call GetUserBalanceUseCase with correct params", async () => {
+    const { sut, getUserBalanceUseCase } = makeSut();
+
+    const executeSpy = jest.spyOn(getUserBalanceUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.userId);
+  });
+
   it("should return 400 if userId is invalid", async () => {
     const { sut } = makeSut();
 
@@ -59,9 +69,9 @@ describe("GetUserBalanceController", () => {
   });
 
   it("should return 400 if user is not found throws UserNotFoundError", async () => {
-    const { sut, getUserBalanceUseCaseStub } = makeSut();
+    const { sut, getUserBalanceUseCase } = makeSut();
 
-    jest.spyOn(getUserBalanceUseCaseStub, "execute").mockImplementation(() => {
+    jest.spyOn(getUserBalanceUseCase, "execute").mockImplementation(() => {
       throw new UserNotFoundError(httpRequest.params.userId);
     });
 
@@ -71,9 +81,9 @@ describe("GetUserBalanceController", () => {
   });
 
   it("should return 500 if GetUserBalanceUseCase throwns an error", async () => {
-    const { sut, getUserBalanceUseCaseStub } = makeSut();
+    const { sut, getUserBalanceUseCase } = makeSut();
 
-    jest.spyOn(getUserBalanceUseCaseStub, "execute").mockImplementation(() => {
+    jest.spyOn(getUserBalanceUseCase, "execute").mockImplementation(() => {
       throw new Error("Server error");
     });
 
