@@ -52,10 +52,14 @@ export const makeCreateUserController = () => {
 export const makeUpdateUserController = () => {
   const updateUserRepository = new PostgresUpdateUserRepository();
   const getUserByEmailRepository = new PostgresGetUserByEmailRepository();
+  const idGeneratorAdapter = new IdGeneratorAdapter();
+
   const updateUserUseCase = new UpdateUserUseCase(
     getUserByEmailRepository,
     updateUserRepository,
+    idGeneratorAdapter,
   );
+
   const updateUserController = new UpdateUserController(updateUserUseCase);
 
   return updateUserController;
