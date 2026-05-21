@@ -16,11 +16,11 @@ describe("UpdateUserController", () => {
       }
     }
 
-    const updateUserUseCaseStub = new UpdateUserUseCaseStub();
-    const sut = new UpdateUserController(updateUserUseCaseStub);
+    const updateUserUseCase = new UpdateUserUseCaseStub();
+    const sut = new UpdateUserController(updateUserUseCase);
 
     return {
-      updateUserUseCaseStub,
+      updateUserUseCase,
       sut,
     };
   };
@@ -49,6 +49,19 @@ describe("UpdateUserController", () => {
     const response = await sut.execute(httpRequest);
 
     expect(response.statusCode).toBe(200);
+  });
+
+  it("should call UpdateUserUseCase with correct params", async () => {
+    const { sut, updateUserUseCase } = makeSut();
+
+    const executeSpy = jest.spyOn(updateUserUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.params.userId,
+      httpRequest.body,
+    );
   });
 
   it("should return 400 when a invalid first_name is provided", async () => {
@@ -130,9 +143,9 @@ describe("UpdateUserController", () => {
   });
 
   it("should return 404 if user is not found", async () => {
-    const { sut, updateUserUseCaseStub } = makeSut();
+    const { sut, updateUserUseCase } = makeSut();
 
-    jest.spyOn(updateUserUseCaseStub, "execute").mockResolvedValue(null);
+    jest.spyOn(updateUserUseCase, "execute").mockResolvedValue(null);
 
     const response = await sut.execute(httpRequest);
 
@@ -140,9 +153,9 @@ describe("UpdateUserController", () => {
   });
 
   it("should return 500 if ocurs an internal server error", async () => {
-    const { sut, updateUserUseCaseStub } = makeSut();
+    const { sut, updateUserUseCase } = makeSut();
 
-    jest.spyOn(updateUserUseCaseStub, "execute").mockImplementation(() => {
+    jest.spyOn(updateUserUseCase, "execute").mockImplementation(() => {
       throw new Error();
     });
 
@@ -152,9 +165,9 @@ describe("UpdateUserController", () => {
   });
 
   it("should return 400 if UpdateUserUseCase throws an error", async () => {
-    const { sut, updateUserUseCaseStub } = makeSut();
+    const { sut, updateUserUseCase } = makeSut();
 
-    jest.spyOn(updateUserUseCaseStub, "execute").mockImplementation(() => {
+    jest.spyOn(updateUserUseCase, "execute").mockImplementation(() => {
       throw new EmailAlreadyInUser(faker.internet.email());
     });
 
