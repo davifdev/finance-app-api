@@ -21,7 +21,7 @@ describe("UpdateTransactionController", () => {
     },
     body: {
       name: faker.lorem.words(),
-      date: faker.date.recent(),
+      date: faker.date.recent().toISOString(),
       amount: faker.number.int(),
       type: "EXPENSE",
     },
