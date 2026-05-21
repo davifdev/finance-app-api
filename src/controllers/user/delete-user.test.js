@@ -43,6 +43,16 @@ describe("DeleteUserController", () => {
     expect(result.statusCode).toBe(200);
   });
 
+  it("should call DeleteUserUseCase with correct params", async () => {
+    const { sut, deleteUserUseCase } = makeSut();
+
+    const executeSpy = jest.spyOn(deleteUserUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.userId);
+  });
+
   it("should return 400 if userId is invalid", async () => {
     const { sut } = makeSut();
 
