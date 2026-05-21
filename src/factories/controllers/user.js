@@ -1,3 +1,4 @@
+import { PasswordHasherAdapter } from "../../adapters/index.js";
 import {
   CreateUserController,
   DeleteUserController,
@@ -32,10 +33,14 @@ export const makeGetUserByIdController = () => {
 export const makeCreateUserController = () => {
   const createUserRepository = new PostgresCreateUserRepository();
   const getUserByEmailRepository = new PostgresGetUserByEmailRepository();
+  const passwordHasherAdapter = new PasswordHasherAdapter();
+
   const createUserUseCase = new CreateUserUseCase(
     getUserByEmailRepository,
     createUserRepository,
+    passwordHasherAdapter,
   );
+
   const createUserController = new CreateUserController(createUserUseCase);
 
   return createUserController;
