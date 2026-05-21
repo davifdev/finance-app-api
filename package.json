@@ -7,6 +7,7 @@
     "start": "node --watch src/index.js",
     "migrations": "node src/db/postgres/migrations/exec.js",
     "test:watch": "jest --watch --passWithNoTests --silent",
+    "test:coverage": "jest --passWithNoTests --silent --coverage",
     "test": "jest --passWithNoTests --silent",
     "prepare": "husky"
   },
