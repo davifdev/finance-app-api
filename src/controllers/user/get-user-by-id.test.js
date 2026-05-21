@@ -15,11 +15,11 @@ describe("GetUserByIdController", () => {
       }
     }
 
-    const getUserByIdUseCaseStub = new GetUserByIdUseCaseStub();
-    const sut = new GetUserByIdController(getUserByIdUseCaseStub);
+    const getUserByIdUseCase = new GetUserByIdUseCaseStub();
+    const sut = new GetUserByIdController(getUserByIdUseCase);
 
     return {
-      getUserByIdUseCaseStub,
+      getUserByIdUseCase,
       sut,
     };
   };
@@ -44,6 +44,16 @@ describe("GetUserByIdController", () => {
     expect(result.statusCode).toBe(200);
   });
 
+  it("should call GetUserByIdUseCase with correct params", async () => {
+    const { sut, getUserByIdUseCase } = makeSut();
+
+    const executeSpy = jest.spyOn(getUserByIdUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.userId);
+  });
+
   it("should return 400 if userId is invalid", async () => {
     const { sut } = makeSut();
 
@@ -53,9 +63,9 @@ describe("GetUserByIdController", () => {
   });
 
   it("should return 404 if user is not found", async () => {
-    const { sut, getUserByIdUseCaseStub } = makeSut();
+    const { sut, getUserByIdUseCase } = makeSut();
 
-    jest.spyOn(getUserByIdUseCaseStub, "execute").mockResolvedValue(null);
+    jest.spyOn(getUserByIdUseCase, "execute").mockResolvedValue(null);
 
     const result = await sut.execute(httpRequest);
 
@@ -63,11 +73,9 @@ describe("GetUserByIdController", () => {
   });
 
   it("should return 500 if getUserByIdUseCase throws", async () => {
-    const { sut, getUserByIdUseCaseStub } = makeSut();
+    const { sut, getUserByIdUseCase } = makeSut();
 
-    jest
-      .spyOn(getUserByIdUseCaseStub, "execute")
-      .mockRejectedValue(new Error());
+    jest.spyOn(getUserByIdUseCase, "execute").mockRejectedValue(new Error());
 
     const result = await sut.execute(httpRequest);
 
