@@ -28,9 +28,8 @@ export class GetTransactionByUserIdController {
         return invalidIdResponse();
       }
 
-      const transactions = await this.getTransactionByUserIdUseCase.execute({
-        userId,
-      });
+      const transactions =
+        await this.getTransactionByUserIdUseCase.execute(userId);
 
       if (!transactions) {
         return transactionNotFoundResponse();

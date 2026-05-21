@@ -40,7 +40,7 @@ describe("GetTransactionByUserIdController", () => {
 
     await sut.execute(httpRequest);
 
-    expect(executeSpy).toHaveBeenCalledWith(httpRequest.query);
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.query.userId);
   });
 
   it("should return 400 if user id is missing", async () => {
