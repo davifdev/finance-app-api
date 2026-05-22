@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { CreateUserUseCase } from "./create-user";
+import { EmailAlreadyInUser } from "../../errors/user";
 
 describe("CreateUserUseCase", () => {
   class GetUserByEmailRepositoryStub {
@@ -48,16 +49,30 @@ describe("CreateUserUseCase", () => {
     };
   };
 
+  const user = {
+    first_name: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+  };
+
   it("should successfully create a user", async () => {
     const { sut } = makeSut();
 
-    const createdUser = await sut.execute({
-      first_name: faker.person.firstName(),
-      lastName: faker.person.lastName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    });
+    const createdUser = await sut.execute(user);
 
     expect(createdUser).toBeTruthy();
+  });
+
+  it("should throw an EmailAlreadyInUser if GetUserByEmailRepository returns a user", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+
+    jest.spyOn(getUserByEmailRepository, "execute").mockReturnValue(user);
+
+    const emailAlreadyInUser = sut.execute(user);
+
+    expect(emailAlreadyInUser).rejects.toThrow(
+      new EmailAlreadyInUser(user.email),
+    );
   });
 });
