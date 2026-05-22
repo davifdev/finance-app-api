@@ -8,7 +8,6 @@ describe("CreateUserUseCase", () => {
       return null;
     }
   }
-
   class CreateUserRepositoryStub {
     async execute(user) {
       return user;
@@ -124,7 +123,9 @@ describe("CreateUserUseCase", () => {
   it("should throw if IdGeneratorAdapter throws", async () => {
     const { sut, idGeneratorAdapter } = makeSut();
 
-    jest.spyOn(idGeneratorAdapter, "execute").mockRejectedValue(new Error());
+    jest.spyOn(idGeneratorAdapter, "execute").mockImplementation(() => {
+      new Error();
+    });
 
     const promise = sut.execute();
 
