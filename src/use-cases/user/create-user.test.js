@@ -75,4 +75,21 @@ describe("CreateUserUseCase", () => {
       new EmailAlreadyInUser(user.email),
     );
   });
+
+  it("should call IdGeneratorAdapter to generate random id", async () => {
+    const { sut, idGeneratorAdapter, createUserRepository } = makeSut();
+
+    const idGeneratorSpy = jest.spyOn(idGeneratorAdapter, "execute");
+
+    const createUserSpy = jest.spyOn(createUserRepository, "execute");
+
+    await sut.execute(user);
+
+    expect(idGeneratorSpy).toHaveBeenCalled();
+    expect(createUserSpy).toHaveBeenCalledWith({
+      ...user,
+      id: "generated_id",
+      password: "hashed_password",
+    });
+  });
 });
