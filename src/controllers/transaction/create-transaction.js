@@ -2,7 +2,6 @@ import { badRequest, created, serverError } from "../helpers/index.js";
 import { createTransactionSchema } from "../../schemas/index.js";
 import { ZodError } from "zod";
 import { UserNotFoundError } from "../../errors/user.js";
-
 export class CreateTransactionController {
   constructor(createTransactionUseCase) {
     this.createTransactionUseCase = createTransactionUseCase;
