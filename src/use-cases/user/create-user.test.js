@@ -130,4 +130,14 @@ describe("CreateUserUseCase", () => {
 
     await expect(promise).rejects.toThrow();
   });
+
+  it("should throw if PasswordHasherAdapter throws", async () => {
+    const { sut, passwordHasherAdapter } = makeSut();
+
+    jest.spyOn(passwordHasherAdapter, "execute").mockRejectedValue(new Error());
+
+    const promise = sut.execute();
+
+    await expect(promise).rejects.toThrow();
+  });
 });
