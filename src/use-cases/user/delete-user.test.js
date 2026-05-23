@@ -48,6 +48,6 @@ describe("DeleteUserUseCase", () => {
 
     const promise = sut.execute();
 
-    expect(promise).rejects.toThrow();
+    await expect(promise).rejects.toThrow();
   });
 });
