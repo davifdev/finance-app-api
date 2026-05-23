@@ -140,16 +140,28 @@ describe("UpdateUserUseCase", () => {
     await expect(promise).rejects.toThrow();
   });
 
-  it("should throw if PasswordHasherAdapter throws", async () => {
-    const { sut, passwordHasherAdapter } = makeSut();
+  it("should throw if GetUserByEmailRepository throws", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
 
-    jest.spyOn(passwordHasherAdapter, "execute").mockImplementation(() => {
+    jest.spyOn(getUserByEmailRepository, "execute").mockImplementation(() => {
       throw new Error();
     });
 
     const promise = sut.execute(faker.string.uuid, {
-      password: user.password,
+      email: user.email,
     });
+
+    await expect(promise).rejects.toThrow();
+  });
+
+  it("should throw if UpdateUserRepository throws", async () => {
+    const { sut, updateUserRepository } = makeSut();
+
+    jest.spyOn(updateUserRepository, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const promise = sut.execute(faker.string.uuid, user);
 
     await expect(promise).rejects.toThrow();
   });
