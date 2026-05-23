@@ -74,4 +74,22 @@ describe("UpdateUserUseCase", () => {
     expect(result).toBe(user);
     expect(getUserByEmailRepositorySpy).toHaveBeenCalledWith(email);
   });
+
+  it("should update user successfully (with password)", async () => {
+    const { sut, passwordHasherAdapter } = makeSut();
+
+    const passwordHasheAdapterSpy = jest.spyOn(
+      passwordHasherAdapter,
+      "execute",
+    );
+
+    const password = faker.internet.password();
+
+    const result = await sut.execute(faker.string.uuid(), {
+      password,
+    });
+
+    expect(result).toBe(user);
+    expect(passwordHasheAdapterSpy).toHaveBeenCalledWith(password);
+  });
 });
