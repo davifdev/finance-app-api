@@ -61,7 +61,7 @@ describe("GetUserBalance", () => {
     expect(result).toStrictEqual(balance);
   });
 
-  it("should throw if GetUserBalance throws", async () => {
+  it("should throw UserNotFoundError if GetUserByIdRepository receives invalid userId", async () => {
     const { sut, getUserByIdRepository } = makeSut();
     const userId = faker.string.uuid;
     jest.spyOn(getUserByIdRepository, "execute").mockReturnValue(null);
