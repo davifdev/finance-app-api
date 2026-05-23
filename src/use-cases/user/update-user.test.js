@@ -125,4 +125,18 @@ describe("UpdateUserUseCase", () => {
       updateUserParams,
     );
   });
+
+  it("should throw if GetUserByEmailRepository throws", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+
+    jest.spyOn(getUserByEmailRepository, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const promise = sut.execute(faker.string.uuid, {
+      email: user.email,
+    });
+
+    await expect(promise).rejects.toThrow();
+  });
 });
