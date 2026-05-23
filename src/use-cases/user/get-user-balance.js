@@ -1,5 +1,4 @@
 import { UserNotFoundError } from "../../errors/user.js";
-
 export class GetUserBalanceUseCase {
   constructor(getUserBalanceRepository, getUserByIdRepository) {
     this.getUserBalanceRepository = getUserBalanceRepository;
