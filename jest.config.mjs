@@ -11,6 +11,7 @@ const config = {
   coverageProvider: "v8",
   collectCoverageFrom: ["src/**/*.js"],
   testPathIgnorePatterns: ["<rootDir>/src/__tests__"],
+  globalSetup: "<rootDir>/jest.global-setup.mjs",
 };
 
 export default config;
