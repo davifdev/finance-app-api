@@ -1,18 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { UpdateUserController } from "./update-user.js";
 import { EmailAlreadyInUser } from "../../errors/user.js";
+import { user } from "../../__tests__/index.js";
 
 describe("UpdateUserController", () => {
   const makeSut = () => {
     class UpdateUserUseCaseStub {
       async execute() {
-        return {
-          id: faker.string.uuid(),
-          email: faker.internet.email(),
-          first_name: faker.person.firstName(),
-          last_name: faker.person.lastName(),
-          password: faker.internet.password(),
-        };
+        return user;
       }
     }
 

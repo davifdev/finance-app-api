@@ -1,17 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { GetUserBalanceController } from "./get-user-balance.js";
 import { UserNotFoundError } from "../../errors/user.js";
+import { balance } from "../../__tests__/index.js";
 
 describe("GetUserBalanceController", () => {
   const makeSut = () => {
     class GetUserBalanceUseCaseStub {
       async execute() {
-        return {
-          EARNINGS: "1000",
-          EXPENSES: "1000",
-          INVESTMENT: "1000",
-          balance: "0",
-        };
+        return balance;
       }
     }
 
@@ -42,12 +38,7 @@ describe("GetUserBalanceController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(200);
-    expect(result.body).toStrictEqual({
-      EARNINGS: "1000",
-      EXPENSES: "1000",
-      INVESTMENT: "1000",
-      balance: "0",
-    });
+    expect(result.body).toStrictEqual(balance);
   });
 
   it("should call GetUserBalanceUseCase with correct params", async () => {
