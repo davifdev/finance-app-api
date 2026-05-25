@@ -38,4 +38,21 @@ describe("UpdateTransactionUseCase", () => {
     expect(result).toBeTruthy();
     expect(result).toStrictEqual({ id, ...transaction });
   });
+
+  it("should call UpdateTransactionRepository with correct params", async () => {
+    const { sut, updateTransactionRepository } = makeSut();
+    const id = faker.string.uuid();
+
+    const updateTransactionRepositorySpy = jest.spyOn(
+      updateTransactionRepository,
+      "execute",
+    );
+
+    await sut.execute(id, transaction);
+
+    expect(updateTransactionRepositorySpy).toHaveBeenCalledWith(
+      id,
+      transaction,
+    );
+  });
 });
