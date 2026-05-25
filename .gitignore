@@ -6,6 +6,7 @@ postgres-data
 
 # Enviroments Variables
 .env
+.env.test
 
 # Prisma
 generated

@@ -1,0 +1,12 @@
+import { PostgresCreateUserRepository } from "./create-user.js";
+import { user } from "../../../__tests__/index.js";
+
+describe("CreateUserRepository", () => {
+  it("should create a user on db", async () => {
+    const sut = new PostgresCreateUserRepository();
+
+    const result = await sut.execute(user);
+
+    expect(result).toBeTruthy();
+  });
+});
