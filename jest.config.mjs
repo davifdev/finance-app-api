@@ -10,6 +10,7 @@ const config = {
   coverageDirectory: "coverage",
   coverageProvider: "v8",
   collectCoverageFrom: ["src/**/*.js"],
+  testPathIgnorePatterns: ["<rootDir>/src/__tests__"],
 };
 
 export default config;
