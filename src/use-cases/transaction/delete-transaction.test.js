@@ -11,8 +11,8 @@ describe("DeleteTransactionUseCase", () => {
   };
 
   class DeleteTransactionRepositoryStub {
-    async execute() {
-      return transaction;
+    async execute(transactionId) {
+      return { ...transaction, id: transactionId };
     }
   }
 
@@ -28,11 +28,14 @@ describe("DeleteTransactionUseCase", () => {
 
   it("should deleted transaction successfully", async () => {
     const { sut } = makeSut();
-
-    const result = await sut.execute(faker.string.uuid());
+    const transactionId = faker.string.uuid();
+    const result = await sut.execute(transactionId);
 
     expect(result).toBeTruthy();
-    expect(result).toStrictEqual(transaction);
+    expect(result).toStrictEqual({
+      ...transaction,
+      id: transactionId,
+    });
   });
 
   it("should call DeleteTransactionRepository with correct params", async () => {
