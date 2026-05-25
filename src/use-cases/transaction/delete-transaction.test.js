@@ -17,11 +17,11 @@ describe("DeleteTransactionUseCase", () => {
   }
 
   const makeSut = () => {
-    const deleteTransactionUseCase = new DeleteTransactionRepositoryStub();
-    const sut = new DeleteTransactionUseCase(deleteTransactionUseCase);
+    const deleteTransactionRepository = new DeleteTransactionRepositoryStub();
+    const sut = new DeleteTransactionUseCase(deleteTransactionRepository);
 
     return {
-      deleteTransactionUseCase,
+      deleteTransactionRepository,
       sut,
     };
   };
@@ -33,5 +33,19 @@ describe("DeleteTransactionUseCase", () => {
 
     expect(result).toBeTruthy();
     expect(result).toStrictEqual(transaction);
+  });
+
+  it("should call with correct params", async () => {
+    const { sut, deleteTransactionRepository } = makeSut();
+    const transactionId = faker.string.uuid();
+
+    const deleteTransactionSpy = jest.spyOn(
+      deleteTransactionRepository,
+      "execute",
+    );
+
+    await sut.execute(transactionId);
+
+    expect(deleteTransactionSpy).toHaveBeenCalledWith(transactionId);
   });
 });
