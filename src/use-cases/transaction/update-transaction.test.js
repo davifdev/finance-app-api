@@ -55,4 +55,19 @@ describe("UpdateTransactionUseCase", () => {
       transaction,
     );
   });
+
+  it("should throw if UpdateTransactionRepository throws", async () => {
+    const { sut, updateTransactionRepository } = makeSut();
+    const id = faker.string.uuid();
+
+    jest
+      .spyOn(updateTransactionRepository, "execute")
+      .mockImplementation(() => {
+        throw new Error();
+      });
+
+    const promise = sut.execute(id, transaction);
+
+    expect(promise).rejects.toThrow();
+  });
 });
