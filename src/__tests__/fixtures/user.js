@@ -7,3 +7,10 @@ export const user = {
   email: faker.internet.email(),
   password: faker.internet.password(),
 };
+
+export const balance = {
+  EARNINGS: "1000",
+  EXPENSES: "1000",
+  INVESTMENT: "1000",
+  balance: "0",
+};

@@ -1,29 +1,19 @@
 import { faker } from "@faker-js/faker";
 import { GetUserBalanceUseCase } from "./get-user-balance";
 import { UserNotFoundError } from "../../errors/user";
+import { balance, user } from "../../__tests__/index.js";
 
 describe("GetUserBalance", () => {
   const makeSut = () => {
     class GetUserBalanceRepositoryStub {
       async execute() {
-        return {
-          EARNINGS: "1000",
-          EXPENSES: "1000",
-          INVESTMENT: "1000",
-          balance: "0",
-        };
+        return balance;
       }
     }
 
     class GetUserByIdRepositoryStub {
       async execute() {
-        return {
-          id: faker.string.uuid(),
-          email: faker.internet.email(),
-          first_name: faker.person.firstName(),
-          last_name: faker.person.lastName(),
-          password: faker.internet.password(),
-        };
+        return user;
       }
     }
 
@@ -36,21 +26,6 @@ describe("GetUserBalance", () => {
 
     return { sut, getUserBalanceRepository, getUserByIdRepository };
   };
-
-  const balance = {
-    EARNINGS: "1000",
-    EXPENSES: "1000",
-    INVESTMENT: "1000",
-    balance: "0",
-  };
-
-  // const user = {
-  //   id: faker.string.uuid(),
-  //   email: faker.internet.email(),
-  //   first_name: faker.person.firstName(),
-  //   last_name: faker.person.lastName(),
-  //   password: faker.internet.password(),
-  // };
 
   it("should get user balance successfully", async () => {
     const { sut } = makeSut();
