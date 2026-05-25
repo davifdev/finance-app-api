@@ -35,7 +35,7 @@ describe("DeleteTransactionUseCase", () => {
     expect(result).toStrictEqual(transaction);
   });
 
-  it("should call with correct params", async () => {
+  it("should call DeleteTransactionRepository with correct params", async () => {
     const { sut, deleteTransactionRepository } = makeSut();
     const transactionId = faker.string.uuid();
 
@@ -47,5 +47,19 @@ describe("DeleteTransactionUseCase", () => {
     await sut.execute(transactionId);
 
     expect(deleteTransactionSpy).toHaveBeenCalledWith(transactionId);
+  });
+
+  it("should throw if DeleteTransactionRepository throws", async () => {
+    const { sut, deleteTransactionRepository } = makeSut();
+
+    jest
+      .spyOn(deleteTransactionRepository, "execute")
+      .mockImplementation(() => {
+        throw new Error();
+      });
+
+    const promise = sut.execute(faker.string.uuid());
+
+    expect(promise).rejects.toThrow();
   });
 });
