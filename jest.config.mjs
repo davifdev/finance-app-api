@@ -12,6 +12,7 @@ const config = {
   collectCoverageFrom: ["src/**/*.js"],
   testPathIgnorePatterns: ["<rootDir>/src/__tests__"],
   globalSetup: "<rootDir>/jest.global-setup.mjs",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 };
 
 export default config;
