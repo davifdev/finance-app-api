@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node --watch src/index.js",
     "migrations": "node src/db/postgres/migrations/exec.js",
-    "test": "dotenv -e .env.test -- jest --passWithNoTests  --silent --runInBand",
-    "test:watch": "npm run test -- --watch --runInBand",
+    "test": "dotenv -e .env.test -- jest --passWithNoTests --silent",
+    "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
     "prepare": "husky"
   },
@@ -34,6 +34,7 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^3.0.3",
+    "dayjs": "^1.11.21",
     "dotenv": "^17.4.2",
     "dotenv-cli": "^11.0.0",
     "express": "^5.2.1",
