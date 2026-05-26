@@ -1,4 +1,4 @@
-import { Prisma } from "../../../../generated/prisma/index.js";
+import { Prisma, TransactionType } from "../../../../generated/prisma/index.js";
 import { prisma } from "../../../../prisma/prisma.js";
 
 // import { PostgresHelper } from "../../../db/postgres/client.js";
@@ -19,7 +19,7 @@ export class PostgresGetUserBalanceRepository {
     } = await prisma.transaction.aggregate({
       where: {
         user_id: userId,
-        type: "EXPENSE",
+        type: TransactionType.EXPENSE,
       },
       _sum: {
         amount: true,
@@ -31,7 +31,7 @@ export class PostgresGetUserBalanceRepository {
     } = await prisma.transaction.aggregate({
       where: {
         user_id: userId,
-        type: "EARNING",
+        type: TransactionType.EARNING,
       },
       _sum: {
         amount: true,
@@ -43,7 +43,7 @@ export class PostgresGetUserBalanceRepository {
     } = await prisma.transaction.aggregate({
       where: {
         user_id: userId,
-        type: "INVESTMENT",
+        type: TransactionType.INVESTMENT,
       },
       _sum: {
         amount: true,
