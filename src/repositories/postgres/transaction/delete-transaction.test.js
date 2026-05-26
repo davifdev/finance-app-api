@@ -4,6 +4,9 @@ import { user } from "../../../__tests__/index.js";
 import dayjs from "dayjs";
 import { faker } from "@faker-js/faker";
 
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { TransactionNotFoundError } from "../../../errors/transaction.js";
+
 describe("DeleteTransactionRepository", () => {
   const makeSut = () => {
     const sut = new PostgresDeleteTransactionRepository();
@@ -43,6 +46,10 @@ describe("DeleteTransactionRepository", () => {
   });
 
   it("should call Prisma with correct params", async () => {
+    await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
     const { sut } = makeSut();
 
     const prismaSpyOn = jest.spyOn(prisma.transaction, "delete");
@@ -54,5 +61,41 @@ describe("DeleteTransactionRepository", () => {
         id: transaction.id,
       },
     });
+  });
+
+  it("should throw TransactionNotFoundError if Prisma throws TransactionNotFoundError", async () => {
+    await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
+
+    const { sut } = makeSut();
+
+    jest
+      .spyOn(prisma.transaction, "delete")
+      .mockRejectedValueOnce(
+        new PrismaClientKnownRequestError("", { code: "P2025" }),
+      );
+
+    const promise = sut.execute(transaction.id);
+
+    expect(promise).rejects.toThrow(
+      new TransactionNotFoundError(transaction.id),
+    );
+  });
+
+  it("should throw generic if Prisma throws generic error", async () => {
+    await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
+
+    const { sut } = makeSut();
+
+    jest.spyOn(prisma.transaction, "delete").mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(transaction.id);
+
+    expect(promise).rejects.toThrow();
   });
 });
