@@ -71,6 +71,18 @@ describe("GetUserBalanceRepository", () => {
     expect(result.balance.toString()).toBe("2000");
   });
 
+  it("should if Prisma throws", async () => {
+    const { sut } = makeSut();
+
+    jest
+      .spyOn(prisma.transaction, "aggregate")
+      .mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(fixturesUser.id);
+
+    await expect(promise).rejects.toThrow();
+  });
+
   it("should call Prisma with correct params", async () => {
     const { sut } = makeSut();
 
