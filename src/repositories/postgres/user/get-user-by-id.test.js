@@ -18,6 +18,16 @@ describe("GetUserByIdRepository", () => {
     expect(result).toStrictEqual(user);
   });
 
+  it("should if Prisma throws", async () => {
+    const { sut } = makeSut();
+
+    jest.spyOn(prisma.user, "findUnique").mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(user.id);
+
+    await expect(promise).rejects.toThrow();
+  });
+
   it("should call Prisma with correct params", async () => {
     const { sut } = makeSut();
     const userId = user.id;
