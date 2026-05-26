@@ -40,4 +40,18 @@ describe("GetTransactionsByUserId", () => {
     expect(dayjs(result[0].date).month()).toBe(dayjs(result[0].date).month());
     expect(dayjs(result[0].date).year()).toBe(dayjs(result[0].date).year());
   });
+
+  it("should call Prisma with correct params", async () => {
+    const { sut } = makeSut();
+
+    const prismaSpy = jest.spyOn(prisma.transaction, "findMany");
+
+    await sut.execute(user.id);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        user_id: user.id,
+      },
+    });
+  });
 });
