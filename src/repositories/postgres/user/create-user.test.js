@@ -20,6 +20,18 @@ describe("CreateUserRepository", () => {
     expect(result.password).toBe(user.password);
   });
 
+  it("should if Prisma throws", async () => {
+    const { sut } = makeSut();
+
+    jest.spyOn(prisma.user, "create").mockRejectedValueOnce(() => {
+      throw new Error();
+    });
+
+    const promise = sut.execute(user);
+
+    await expect(promise).rejects.toThrow();
+  });
+
   it("should call Prisma with correct params", async () => {
     const { sut } = makeSut();
     const prismaSpy = jest.spyOn(prisma.user, "create");
