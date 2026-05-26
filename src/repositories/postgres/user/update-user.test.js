@@ -27,6 +27,17 @@ describe("UpdateUserRepository", () => {
     expect(result).toStrictEqual(updateUserParams);
   });
 
+  it("should if Prisma throws", async () => {
+    const user = await prisma.user.create({ data: fixturesUser });
+    const { sut } = makeSut();
+
+    jest.spyOn(prisma.user, "update").mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(user.id, updateUserParams);
+
+    await expect(promise).rejects.toThrow();
+  });
+
   it("should call Prisma with correct params", async () => {
     const user = await prisma.user.create({ data: fixturesUser });
     const { sut } = makeSut();
