@@ -33,4 +33,16 @@ describe("DeleteUserRepository", () => {
       },
     });
   });
+
+  it("should throw if DeleteUserRepository throws", async () => {
+    const { sut } = makeSut();
+
+    jest.spyOn(prisma.user, "delete").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const result = await sut.execute(user.id);
+
+    expect(result).toBeNull();
+  });
 });
