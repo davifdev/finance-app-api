@@ -69,4 +69,41 @@ describe("GetUserBalanceRepository", () => {
     expect(result.investment.toString()).toBe("6000");
     expect(result.balance.toString()).toBe("2000");
   });
+
+  it("should call Prisma with correct params", async () => {
+    const { sut } = makeSut();
+
+    const prismaSpy = jest.spyOn(prisma.transaction, "aggregate");
+
+    await sut.execute(fixturesUser.id);
+
+    expect(prismaSpy).toHaveBeenCalledTimes(3);
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        user_id: fixturesUser.id,
+        type: "EXPENSE",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        user_id: fixturesUser.id,
+        type: "EARNING",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        user_id: fixturesUser.id,
+        type: "INVESTMENT",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+  });
 });
