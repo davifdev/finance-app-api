@@ -20,21 +20,21 @@ describe("UpdateTransactionRepository", () => {
     amount: faker.number.int({ min: 10, max: 999 }),
   };
 
+  const updateTransactionsParams = {
+    id: faker.string.uuid(),
+    user_id: user.id,
+    name: faker.lorem.words(6),
+    date: faker.date.past().toISOString(),
+    type: "EARNING",
+    amount: faker.number.int({ min: 10, max: 999 }),
+  };
+
   it("should update a transaction on db", async () => {
     await prisma.user.create({ data: user });
     await prisma.transaction.create({
       data: { ...transaction, user_id: user.id },
     });
     const { sut } = makeSut();
-
-    const updateTransactionsParams = {
-      id: faker.string.uuid(),
-      user_id: user.id,
-      name: faker.lorem.words(6),
-      date: faker.date.past().toISOString(),
-      type: "EARNING",
-      amount: faker.number.int(10),
-    };
 
     const result = await sut.execute(transaction.id, updateTransactionsParams);
 
@@ -54,5 +54,24 @@ describe("UpdateTransactionRepository", () => {
     expect(dayjs(result.date).year()).toBe(
       dayjs(updateTransactionsParams.date).year(),
     );
+  });
+
+  it("should call Prisma with correct params", async () => {
+    await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
+    const { sut } = makeSut();
+
+    const prismaSpy = jest.spyOn(prisma.transaction, "update");
+
+    await sut.execute(transaction.id, { ...transaction, user_id: user.id });
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        id: transaction.id,
+      },
+      data: { ...transaction, user_id: user.id },
+    });
   });
 });
