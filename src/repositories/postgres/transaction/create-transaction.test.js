@@ -11,7 +11,7 @@ describe("CreateTransactionRepository", () => {
     name: faker.lorem.words(6),
     date: faker.date.past().toISOString(),
     type: "EARNING",
-    amount: faker.number.int(10),
+    amount: faker.number.int({ min: 10, max: 999 }),
   };
 
   const makeSut = () => {
@@ -34,8 +34,8 @@ describe("CreateTransactionRepository", () => {
     expect(dayjs(result.date).daysInMonth()).toBe(
       dayjs(transaction.date).daysInMonth(),
     );
-    expect(dayjs(result.date).month()).toBe(dayjs(result.date).month());
-    expect(dayjs(result.date).year()).toBe(dayjs(result.date).year());
+    expect(dayjs(result.date).month()).toBe(dayjs(transaction.date).month());
+    expect(dayjs(result.date).year()).toBe(dayjs(transaction.date).year());
   });
 
   it("should if Prisma throws", async () => {

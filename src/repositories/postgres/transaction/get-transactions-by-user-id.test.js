@@ -37,8 +37,8 @@ describe("GetTransactionsByUserId", () => {
     expect(dayjs(result[0].date).daysInMonth()).toBe(
       dayjs(transaction.date).daysInMonth(),
     );
-    expect(dayjs(result[0].date).month()).toBe(dayjs(result[0].date).month());
-    expect(dayjs(result[0].date).year()).toBe(dayjs(result[0].date).year());
+    expect(dayjs(result[0].date).month()).toBe(dayjs(transaction.date).month());
+    expect(dayjs(result[0].date).year()).toBe(dayjs(transaction.date).year());
   });
 
   it("should call Prisma with correct params", async () => {
