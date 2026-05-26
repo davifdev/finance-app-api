@@ -74,4 +74,18 @@ describe("UpdateTransactionRepository", () => {
       data: { ...transaction, user_id: user.id },
     });
   });
+
+  it("should if Prisma throws", async () => {
+    await prisma.user.create({ data: user });
+    const { sut } = makeSut();
+
+    jest.spyOn(prisma.transaction, "update").mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(transaction.id, {
+      ...transaction,
+      user_id: user.id,
+    });
+
+    await expect(promise).rejects.toThrow();
+  });
 });
