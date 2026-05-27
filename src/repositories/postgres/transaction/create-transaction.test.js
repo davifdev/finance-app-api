@@ -1,19 +1,9 @@
 import { PostgresCreateTransactionRepository } from "./create-transaction.js";
 import { prisma } from "../../../../prisma/prisma.js";
-import { user as fixturesUser } from "../../../__tests__/index.js";
-import { faker } from "@faker-js/faker";
+import { transaction, user } from "../../../__tests__/index.js";
 import dayjs from "dayjs";
 
 describe("CreateTransactionRepository", () => {
-  const transaction = {
-    id: faker.string.uuid(),
-    user_id: faker.string.uuid(),
-    name: faker.lorem.words(6),
-    date: faker.date.past().toISOString(),
-    type: "EARNING",
-    amount: faker.number.int({ min: 10, max: 999 }),
-  };
-
   const makeSut = () => {
     const sut = new PostgresCreateTransactionRepository();
 
@@ -21,7 +11,7 @@ describe("CreateTransactionRepository", () => {
   };
 
   it("should create a transaction on db", async () => {
-    const user = await prisma.user.create({ data: fixturesUser });
+    await prisma.user.create({ data: user });
     const { sut } = makeSut();
 
     const result = await sut.execute({ ...transaction, user_id: user.id });
@@ -39,7 +29,7 @@ describe("CreateTransactionRepository", () => {
   });
 
   it("should if Prisma throws", async () => {
-    const user = await prisma.user.create({ data: fixturesUser });
+    await prisma.user.create({ data: user });
     const { sut } = makeSut();
 
     jest.spyOn(prisma.transaction, "create").mockRejectedValueOnce(new Error());
@@ -50,7 +40,7 @@ describe("CreateTransactionRepository", () => {
   });
 
   it("should call Prisma with correct params", async () => {
-    const user = await prisma.user.create({ data: fixturesUser });
+    await prisma.user.create({ data: user });
     const { sut } = makeSut();
 
     const prismaSpy = jest.spyOn(prisma.transaction, "create");

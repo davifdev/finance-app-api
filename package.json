@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --watch src/index.js",
     "migrations": "node src/db/postgres/migrations/exec.js",
-    "test": "dotenv -e .env.test -- jest --passWithNoTests --silent",
+    "test": "dotenv -e .env.test -- jest --passWithNoTests --silent --runInBand",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
     "prepare": "husky"
@@ -29,7 +29,8 @@
     "husky": "^9.1.7",
     "jest": "^30.4.2",
     "lint-staged": "^16.4.0",
-    "prettier": "^3.8.3"
+    "prettier": "^3.8.3",
+    "supertest": "^7.2.2"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

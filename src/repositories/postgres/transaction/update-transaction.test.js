@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { PostgresUpdateTransactionRepository } from "./update-transaction";
 import { prisma } from "../../../../prisma/prisma";
-import { user } from "../../../__tests__";
+import { transaction, user } from "../../../__tests__/index.js";
 import dayjs from "dayjs";
 
 describe("UpdateTransactionRepository", () => {
@@ -11,22 +11,13 @@ describe("UpdateTransactionRepository", () => {
     return { sut };
   };
 
-  const transaction = {
-    id: faker.string.uuid(),
-    user_id: faker.string.uuid(),
-    name: faker.lorem.words(6),
-    date: faker.date.past().toISOString(),
-    type: "EARNING",
-    amount: faker.number.int({ min: 10, max: 999 }),
-  };
-
   const updateTransactionsParams = {
     id: faker.string.uuid(),
     user_id: user.id,
     name: faker.lorem.words(6),
     date: faker.date.past().toISOString(),
     type: "EARNING",
-    amount: faker.number.int({ min: 10, max: 999 }),
+    amount: faker.number.int({ min: 10, max: 99 }),
   };
 
   it("should update a transaction on db", async () => {

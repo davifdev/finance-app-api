@@ -6,5 +6,5 @@ export const transaction = {
   name: faker.lorem.words(6),
   date: faker.date.past().toISOString(),
   type: "EARNING",
-  amount: faker.number.int(),
+  amount: faker.number.int({ min: 1, max: 99 }),
 };

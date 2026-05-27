@@ -1,6 +1,5 @@
-import { faker } from "@faker-js/faker";
 import { prisma } from "../../../../prisma/prisma";
-import { user } from "../../../__tests__";
+import { transaction, user } from "../../../__tests__/index.js";
 import { PostgresGetTransactionByUserIdRepository } from "./get-transactions-by-user-id";
 import dayjs from "dayjs";
 
@@ -9,15 +8,6 @@ describe("GetTransactionsByUserId", () => {
     const sut = new PostgresGetTransactionByUserIdRepository();
 
     return { sut };
-  };
-
-  const transaction = {
-    id: faker.string.uuid(),
-    user_id: faker.string.uuid(),
-    name: faker.lorem.words(6),
-    date: faker.date.past().toISOString(),
-    type: "EARNING",
-    amount: faker.number.int(10),
   };
 
   it("should get a transaction by user id on db", async () => {

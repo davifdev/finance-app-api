@@ -1,8 +1,7 @@
 import { prisma } from "../../../../prisma/prisma";
 import { PostgresDeleteTransactionRepository } from "./delete-transaction";
-import { user } from "../../../__tests__/index.js";
+import { transaction, user } from "../../../__tests__/index.js";
 import dayjs from "dayjs";
-import { faker } from "@faker-js/faker";
 
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { TransactionNotFoundError } from "../../../errors/transaction.js";
@@ -12,15 +11,6 @@ describe("DeleteTransactionRepository", () => {
     const sut = new PostgresDeleteTransactionRepository();
 
     return { sut };
-  };
-
-  const transaction = {
-    id: faker.string.uuid(),
-    user_id: faker.string.uuid(),
-    name: faker.lorem.words(6),
-    date: faker.date.past().toISOString(),
-    type: "EARNING",
-    amount: faker.number.int(10),
   };
 
   it("should delete a transaction on db", async () => {
