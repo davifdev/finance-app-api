@@ -1,6 +1,7 @@
 /** @type {import('jest').Config} */
 
 const config = {
+  testEnvironment: "node",
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
