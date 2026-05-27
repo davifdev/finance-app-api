@@ -7,10 +7,24 @@ describe("User Routes E2E Tests", () => {
     const response = await request(app)
       .post("/api/users")
       .send({
-        id: undefined,
         ...user,
+        id: undefined,
       });
 
     expect(response.status).toBe(201);
+  });
+
+  it("GET /api/users/:userId should return 200 when user is found", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const response = await request(app).get(`/api/users/${createdUser.id}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toStrictEqual(createdUser);
   });
 });
