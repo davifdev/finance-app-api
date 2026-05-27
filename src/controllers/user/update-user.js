@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { EmailAlreadyInUser } from "../../errors/user.js";
+import { EmailAlreadyInUser, UserNotFoundError } from "../../errors/user.js";
 import {
   checkIfIdIsValid,
   invalidIdResponse,
@@ -44,6 +44,9 @@ export class UpdateUserController {
       }
       if (error instanceof EmailAlreadyInUser) {
         return badRequest({ message: error.message });
+      }
+      if (error instanceof UserNotFoundError) {
+        return userNotFoundResponse();
       }
       return serverError();
     }
