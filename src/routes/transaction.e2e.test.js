@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../index.js";
 import { user } from "../__tests__/fixtures/user.js";
+import { faker } from "@faker-js/faker";
 
 describe("Transaction Routes E2E Test", () => {
   it("POST /api/transactions should return 201 when creating a transaction successfully", async () => {
@@ -94,5 +95,13 @@ describe("Transaction Routes E2E Test", () => {
     );
 
     expect(response.status).toBe(200);
+  });
+
+  it("PATCH /api/transactions/:transactionId should return 404 if invalid id", async () => {
+    const response = await request(app)
+      .patch(`/api/transactions/${faker.string.uuid()}`)
+      .send({ name: "Drop" });
+
+    expect(response.status).toBe(404);
   });
 });
