@@ -8,7 +8,7 @@ import {
 
 export const transactionsRouter = Router();
 
-transactionsRouter.post("", async (request, response) => {
+transactionsRouter.post("/", async (request, response) => {
   const createTransactionController = makeCreateTransactionController();
 
   const { statusCode, body } =
