@@ -1,10 +1,22 @@
-import { CreateTransactionController } from "../../controllers";
-import { makeCreateTransactionController } from "./transaction";
+import {
+  CreateTransactionController,
+  GetTransactionByUserIdController,
+} from "../../controllers";
+import {
+  makeCreateTransactionController,
+  makeGetTransactionByUserIdController,
+} from "./transaction";
 
 describe("TransactionControllerFactories", () => {
   it("should return a valid CreateTransactionController instance", () => {
     expect(makeCreateTransactionController()).toBeInstanceOf(
       CreateTransactionController,
+    );
+  });
+
+  it("should return a valid GetTransactionByUserIdController", () => {
+    expect(makeGetTransactionByUserIdController()).toBeInstanceOf(
+      GetTransactionByUserIdController,
     );
   });
 });
