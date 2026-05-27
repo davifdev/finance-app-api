@@ -5,9 +5,10 @@ import {
   checkIfIdIsValid,
   ok,
   serverError,
-  transactionNotFoundResponse,
   badRequest,
+  transactionNotFoundResponse,
 } from "../helpers/index.js";
+import { TransactionNotFoundError } from "../../errors/transaction.js";
 
 export class UpdateTransactionController {
   constructor(updateTransactionUseCase) {
@@ -32,9 +33,9 @@ export class UpdateTransactionController {
         params,
       );
 
-      if (!transaction) {
-        return transactionNotFoundResponse();
-      }
+      // if (!transaction) {
+      //   return transactionNotFoundResponse();
+      // }
 
       return ok(transaction);
     } catch (error) {
@@ -43,6 +44,10 @@ export class UpdateTransactionController {
         return badRequest({
           message: error.issues[0].message,
         });
+      }
+
+      if (error instanceof TransactionNotFoundError) {
+        return transactionNotFoundResponse();
       }
       return serverError();
     }

@@ -3,6 +3,8 @@ import { PostgresUpdateTransactionRepository } from "./update-transaction";
 import { prisma } from "../../../../prisma/prisma";
 import { transaction, user } from "../../../__tests__/index.js";
 import dayjs from "dayjs";
+import { TransactionNotFoundError } from "../../../errors/transaction.js";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 describe("UpdateTransactionRepository", () => {
   const makeSut = () => {
@@ -68,6 +70,9 @@ describe("UpdateTransactionRepository", () => {
 
   it("should if Prisma throws", async () => {
     await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
     const { sut } = makeSut();
 
     jest.spyOn(prisma.transaction, "update").mockRejectedValueOnce(new Error());
@@ -78,5 +83,26 @@ describe("UpdateTransactionRepository", () => {
     });
 
     await expect(promise).rejects.toThrow();
+  });
+
+  it("should throw TransactionNotFoundError if Prisma throws TransactionNotFoundError", async () => {
+    await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
+
+    const { sut } = makeSut();
+
+    jest
+      .spyOn(prisma.transaction, "update")
+      .mockRejectedValueOnce(
+        new PrismaClientKnownRequestError("", { code: "P2025" }),
+      );
+
+    const promise = sut.execute(transaction.id);
+
+    expect(promise).rejects.toThrow(
+      new TransactionNotFoundError(transaction.id),
+    );
   });
 });

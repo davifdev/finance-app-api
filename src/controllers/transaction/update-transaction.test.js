@@ -145,16 +145,6 @@ describe("UpdateTransactionController", () => {
     expect(result.statusCode).toBe(400);
   });
 
-  it("should return 404 if transaction is not found", async () => {
-    const { sut, updateTransactionUseCase } = makeSut();
-
-    jest.spyOn(updateTransactionUseCase, "execute").mockResolvedValue(null);
-
-    const result = await sut.execute(httpRequest);
-
-    expect(result.statusCode).toBe(404);
-  });
-
   it("should return 500 if occurs internal server error", async () => {
     const { sut, updateTransactionUseCase } = makeSut();
 
