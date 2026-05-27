@@ -3,6 +3,7 @@ import { PostgresUpdateUserRepository } from "./update-user";
 import { user as fixturesUser } from "../../../__tests__/index.js";
 import { prisma } from "../../../../prisma/prisma.js";
 import { UserNotFoundError } from "../../../errors/user.js";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 describe("UpdateUserRepository", () => {
   const makeSut = () => {
@@ -40,16 +41,18 @@ describe("UpdateUserRepository", () => {
   });
 
   it("should throw UserNotFoundError if throws", async () => {
-    const user = await prisma.user.create({ data: fixturesUser });
     const { sut } = makeSut();
 
     jest
       .spyOn(prisma.user, "update")
-      .mockRejectedValueOnce(new UserNotFoundError(user.id));
+      .mockRejectedValueOnce(
+        new PrismaClientKnownRequestError("", { code: "P2025" }),
+      );
+    const promise = sut.execute(updateUserParams.id);
 
-    const promise = sut.execute(user.id, updateUserParams);
-
-    await expect(promise).rejects.toThrow(new UserNotFoundError(user.id));
+    await expect(promise).rejects.toThrow(
+      new UserNotFoundError(updateUserParams.id),
+    );
   });
 
   it("should call Prisma with correct params", async () => {
