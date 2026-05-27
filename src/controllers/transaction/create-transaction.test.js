@@ -157,7 +157,7 @@ describe("CreateTransactionController", () => {
     expect(result.statusCode).toBe(500);
   });
 
-  it("should return 400 if user not found", async () => {
+  it("should return 404 if user not found", async () => {
     const { sut, createTransactionUseCase } = makeSut();
 
     jest.spyOn(createTransactionUseCase, "execute").mockImplementation(() => {
@@ -166,6 +166,6 @@ describe("CreateTransactionController", () => {
 
     const result = await sut.execute(httpRequest);
 
-    expect(result.statusCode).toBe(400);
+    expect(result.statusCode).toBe(404);
   });
 });
