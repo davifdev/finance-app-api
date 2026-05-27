@@ -77,46 +77,40 @@ describe("User Routes E2E Tests", () => {
         id: undefined,
       });
 
-    await request(app)
-      .post("/api/transactions")
-      .send({
-        user_id: createdUser.id,
-        name: faker.lorem.words(6),
-        date: "2026-05-19T18:30:00Z",
-        amount: 8000,
-        type: TransactionType.EARNING,
-      });
+    await request(app).post("/api/transactions").send({
+      user_id: createdUser.id,
+      name: faker.lorem.words(),
+      date: "2026-05-19T18:30:00Z",
+      amount: 8000,
+      type: TransactionType.EARNING,
+    });
 
-    await request(app)
-      .post("/api/transactions")
-      .send({
-        user_id: createdUser.id,
-        name: faker.lorem.words(6),
-        date: "2026-05-19T18:30:00Z",
-        amount: 3000,
-        type: TransactionType.EXPENSE,
-      });
+    await request(app).post("/api/transactions").send({
+      user_id: createdUser.id,
+      name: faker.lorem.words(),
+      date: "2026-05-19T19:30:00Z",
+      amount: 3000,
+      type: TransactionType.EXPENSE,
+    });
 
-    await request(app)
-      .post("/api/transactions")
-      .send({
-        user_id: createdUser.id,
-        name: faker.lorem.words(6),
-        date: "2026-05-19T18:30:00Z",
-        amount: 2000,
-        type: TransactionType.INVESTMENT,
-      });
+    await request(app).post("/api/transactions").send({
+      user_id: createdUser.id,
+      name: faker.lorem.words(),
+      date: "2026-05-19T17:30:00Z",
+      amount: 2000,
+      type: TransactionType.INVESTMENT,
+    });
 
     const response = await request(app).get(
       `/api/users/${createdUser.id}/balance`,
     );
 
     expect(response.status).toBe(200);
-    expect(response.body).toStrictEqual({
+    expect(response.body).toEqual({
+      balance: "3000",
       earnings: "8000",
       expense: "3000",
       investment: "2000",
-      balance: "3000",
     });
   });
 
@@ -147,5 +141,25 @@ describe("User Routes E2E Tests", () => {
       });
 
     expect(response.status).toBe(404);
+  });
+
+  it("POST /api/users should return 400 when provided e-mail is already in user", async () => {
+    await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+        email: "davi@gmail.com",
+      });
+
+    const response = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+        email: "davi@gmail.com",
+      });
+
+    expect(response.status).toBe(400);
   });
 });
