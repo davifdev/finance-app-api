@@ -30,6 +30,7 @@ export class DeleteUserController {
 
       return ok(deletedUser);
     } catch (error) {
+      console.error(error);
       if (error instanceof UserNotFoundError) {
         return userNotFoundResponse();
       }
