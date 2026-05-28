@@ -214,6 +214,142 @@
               "$ref": "#/definitions/InvalidParamResponse"
             }
           },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions?userId={userId}": {
+      "get": {
+        "summary": "Get transacion by user ID",
+        "tags": ["Transactions"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "transactionId",
+            "required": true,
+            "type": "string",
+            "description": "ID of the user to get transactions"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction found",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Invalid Param",
+            "schema": {
+              "$ref": "#/definitions/InvalidParamResponse"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFound"
+            }
+          },
+
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/transaction/{transactionId}": {
+      "patch": {
+        "summary": "Update transaction by ID",
+        "tags": ["Transactions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "type": "string",
+            "description": "ID of the transaction to update"
+          },
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateTransaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction update successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Invalid Param",
+            "schema": {
+              "$ref": "#/definitions/InvalidParamResponse"
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "schema": {
+              "$ref": "#/definitions/TransactionNotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete transaction",
+        "tags": ["Transactions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "type": "string",
+            "description": "ID of the transaction to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Invalid Param",
+            "schema": {
+              "$ref": "#/definitions/InvalidParamResponse"
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "schema": {
+              "$ref": "#/definitions/TransactionNotFound"
+            }
+          },
           "500": {
             "description": "Internal server error",
             "schema": {
@@ -307,6 +443,15 @@
         "message": {
           "type": "string",
           "example": "User not found"
+        }
+      }
+    },
+    "TransactionNotFound": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Transaction not found"
         }
       }
     },
