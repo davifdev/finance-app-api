@@ -186,6 +186,42 @@
           }
         }
       }
+    },
+    "/api/tansactions": {
+      "post": {
+        "summary": "Create a new Transaction",
+        "tags": ["Transactions"],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateTransaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction created successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Invalid Param",
+            "schema": {
+              "$ref": "#/definitions/InvalidParamResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -280,6 +316,61 @@
         "message": {
           "type": "string",
           "example": "Invalid param"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "33e7708b-d209-4513-af95-1d511e32eb23"
+        },
+        "user_id": {
+          "type": "string",
+          "example": "33e7708b-d209-4513-af95-1d511e32eb23"
+        },
+        "name": {
+          "type": "string",
+          "example": "Salário"
+        },
+
+        "date": {
+          "type": "string",
+          "example": "2026-05-19T18:30:00Z"
+        },
+        "amount": {
+          "type": "number",
+          "example": 1000
+        },
+        "type": {
+          "type": "string",
+          "example": "EARNING"
+        }
+      }
+    },
+    "CreateTransaction": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Salário"
+        },
+        "user_id": {
+          "type": "string",
+          "example": "33e7708b-d209-4513-af95-1d511e32eb23"
+        },
+        "date": {
+          "type": "string",
+          "example": "2026-05-19T18:30:00Z"
+        },
+        "amount": {
+          "type": "number",
+          "example": 1000
+        },
+        "type": {
+          "type": "string",
+          "example": "EARNING"
         }
       }
     }
