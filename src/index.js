@@ -1,6 +1,9 @@
 import "dotenv/config";
 import express from "express";
 import { usersRouter, transactionsRouter } from "./routes/index.js";
+import swaggerUi from "swagger-ui-express";
+import fs from "fs";
+import path from "path";
 
 export const app = express();
 
@@ -12,3 +15,12 @@ app.use("/api/transactions", transactionsRouter);
 app.listen(process.env.PORT, () => {
   console.log(`Server is running at http://localhost:${process.env.PORT}`);
 });
+
+const swaggerDocument = JSON.parse(
+  fs.readFileSync(
+    path.join(import.meta.dirname, "../docs/swagger.json"),
+    "utf-8",
+  ),
+);
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
