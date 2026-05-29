@@ -3,5 +3,5 @@ import "dotenv/config";
 
 export default async function globalSetup() {
   execSync("docker compose up -d --wait postgres-test");
-  execSync("npx prisma db push", { stdio: "inherit" });
+  execSync("npx prisma db push");
 }
