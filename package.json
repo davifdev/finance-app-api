@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch src/index.cjs",
+    "start": "node --watch src/index.js",
     "migrations": "node src/db/postgres/migrations/exec.js",
     "test": "dotenv -e .env.test -- jest --passWithNoTests --silent --runInBand --detectOpenHandles",
     "test:watch": "npm run test -- --watch",

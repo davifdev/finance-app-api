@@ -12,10 +12,6 @@ app.use(express.json());
 app.use("/api/users", usersRouter);
 app.use("/api/transactions", transactionsRouter);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running at http://localhost:${process.env.PORT}`);
-});
-
 const swaggerDocument = JSON.parse(
   fs.readFileSync(path.join(__dirname, "../docs/swagger.json"), "utf-8"),
 );
