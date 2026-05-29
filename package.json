@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch src/index.js",
+    "start": "node --watch src/index.cjs",
     "migrations": "node src/db/postgres/migrations/exec.js",
     "test": "dotenv -e .env.test -- jest --passWithNoTests --silent --runInBand --detectOpenHandles",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
+    "eslint:check": "eslint src --ext .js",
+    "prettier:check": "prettier --check src",
     "prepare": "husky"
   },
   "keywords": [],
