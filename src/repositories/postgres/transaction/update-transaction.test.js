@@ -16,10 +16,10 @@ describe("UpdateTransactionRepository", () => {
   const updateTransactionsParams = {
     id: faker.string.uuid(),
     user_id: user.id,
-    name: faker.lorem.words(6),
+    name: faker.lorem.words(1),
     date: faker.date.past().toISOString(),
     type: "EARNING",
-    amount: faker.number.int({ min: 10, max: 99 }),
+    amount: faker.number.float({ min: 1, fractionDigits: 2 }),
   };
 
   it("should update a transaction on db", async () => {

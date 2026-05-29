@@ -19,14 +19,14 @@ describe("GetUserBalanceRepository", () => {
       data: [
         {
           date: faker.date.past().toISOString(),
-          name: faker.lorem.words(6),
+          name: faker.lorem.words(1),
           amount: 5000,
           type: "EARNING",
           user_id: user.id,
         },
         {
           date: faker.date.past().toISOString(),
-          name: faker.lorem.words(6),
+          name: faker.lorem.words(1),
           amount: 5000,
           type: "EARNING",
           user_id: user.id,
@@ -34,28 +34,28 @@ describe("GetUserBalanceRepository", () => {
 
         {
           date: faker.date.past().toISOString(),
-          name: faker.lorem.words(6),
+          name: faker.lorem.words(1),
           amount: 1000,
           type: "EXPENSE",
           user_id: user.id,
         },
         {
           date: faker.date.past().toISOString(),
-          name: faker.lorem.words(6),
+          name: faker.lorem.words(1),
           amount: 1000,
           type: "EXPENSE",
           user_id: user.id,
         },
         {
           date: faker.date.past().toISOString(),
-          name: faker.lorem.words(6),
+          name: faker.lorem.words(1),
           amount: 3000,
           type: "INVESTMENT",
           user_id: user.id,
         },
         {
           date: faker.date.past().toISOString(),
-          name: faker.lorem.words(6),
+          name: faker.lorem.words(1),
           amount: 3000,
           type: "INVESTMENT",
           user_id: user.id,

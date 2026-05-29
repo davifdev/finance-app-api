@@ -31,11 +31,4 @@ jobs:
         run: npm run prettier:check
 
       - name: Test
-        env:
-          POSTGRES_PASSWORD: password
-          POSTGRES_USER: root
-          POSTGRES_DB: financeapp
-          POSTGRES_PORT: 5432
-          POSTGRES_HOST: localhost
-          DATABASE_URL: "postgresql://root:password@localhost:5433/financeapp"
         run: npm run test
