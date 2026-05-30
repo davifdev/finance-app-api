@@ -12,7 +12,7 @@ const config = {
   coverageProvider: "v8",
   collectCoverageFrom: ["src/**/*.js"],
   testPathIgnorePatterns: ["<rootDir>/src/__tests__"],
-  globalSetup: "<rootDir>/jest.global-setup.mjs",
+  globalSetup: "<rootDir>/jest.global-setup.js",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 };
 
