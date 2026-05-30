@@ -19,7 +19,9 @@ jobs:
           node-version: "22"
 
       - name: Create enviroment file
-        run: echo "DATABASE_URL=postgres://root:password@localhost:5433/financeapp" >> .env.test
+        run:
+          echo "DATABASE_URL=postgres://root:password@localhost:5433/financeapp"
+          >> .env.test
 
       - name: Install dependencies
         run: npm install
@@ -32,3 +34,24 @@ jobs:
 
       - name: Test
         run: npm run test
+
+  migrate:
+    runs-on: ubuntu-latest
+    needs: check
+    environment: Production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
