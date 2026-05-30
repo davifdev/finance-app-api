@@ -100,7 +100,7 @@ describe("CreateUserController", () => {
   it("should call CreateUserUseCase with correct params", async () => {
     const { sut, createUserUseCase } = makeSut();
 
-    const executeSpy = jest.spyOn(createUserUseCase, "execute");
+    const executeSpy = import.meta.jest.spyOn(createUserUseCase, "execute");
 
     await sut.execute(httpRequest);
 
@@ -110,9 +110,11 @@ describe("CreateUserController", () => {
   it("should return 500 if CreateUserUseCase throws an error", async () => {
     const { sut, createUserUseCase } = makeSut();
 
-    jest.spyOn(createUserUseCase, "execute").mockImplementation(() => {
-      throw new Error("Server error");
-    });
+    import.meta.jest
+      .spyOn(createUserUseCase, "execute")
+      .mockImplementation(() => {
+        throw new Error("Server error");
+      });
 
     const result = await sut.execute(httpRequest);
 
@@ -122,9 +124,11 @@ describe("CreateUserController", () => {
   it("should return 500 if CreateUserUseCase throws EmailAlreadyInUseError", async () => {
     const { sut, createUserUseCase } = makeSut();
 
-    jest.spyOn(createUserUseCase, "execute").mockImplementation(() => {
-      throw new EmailAlreadyInUser(httpRequest.body.email);
-    });
+    import.meta.jest
+      .spyOn(createUserUseCase, "execute")
+      .mockImplementation(() => {
+        throw new EmailAlreadyInUser(httpRequest.body.email);
+      });
 
     const result = await sut.execute(httpRequest);
 

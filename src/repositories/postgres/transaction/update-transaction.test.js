@@ -56,7 +56,7 @@ describe("UpdateTransactionRepository", () => {
     });
     const { sut } = makeSut();
 
-    const prismaSpy = jest.spyOn(prisma.transaction, "update");
+    const prismaSpy = import.meta.jest.spyOn(prisma.transaction, "update");
 
     await sut.execute(transaction.id, { ...transaction, user_id: user.id });
 
@@ -75,7 +75,9 @@ describe("UpdateTransactionRepository", () => {
     });
     const { sut } = makeSut();
 
-    jest.spyOn(prisma.transaction, "update").mockRejectedValueOnce(new Error());
+    import.meta.jest
+      .spyOn(prisma.transaction, "update")
+      .mockRejectedValueOnce(new Error());
 
     const promise = sut.execute(transaction.id, {
       ...transaction,
@@ -93,7 +95,7 @@ describe("UpdateTransactionRepository", () => {
 
     const { sut } = makeSut();
 
-    jest
+    import.meta.jest
       .spyOn(prisma.transaction, "update")
       .mockRejectedValueOnce(
         new PrismaClientKnownRequestError("", { code: "P2025" }),

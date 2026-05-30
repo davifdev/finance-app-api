@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { application } from "express";
 
 application.listen(process.env.PORT, () => {

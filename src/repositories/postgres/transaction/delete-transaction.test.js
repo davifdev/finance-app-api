@@ -42,7 +42,7 @@ describe("DeleteTransactionRepository", () => {
     });
     const { sut } = makeSut();
 
-    const prismaSpyOn = jest.spyOn(prisma.transaction, "delete");
+    const prismaSpyOn = import.meta.jest.spyOn(prisma.transaction, "delete");
 
     await sut.execute(transaction.id);
 
@@ -61,7 +61,7 @@ describe("DeleteTransactionRepository", () => {
 
     const { sut } = makeSut();
 
-    jest
+    import.meta.jest
       .spyOn(prisma.transaction, "delete")
       .mockRejectedValueOnce(
         new PrismaClientKnownRequestError("", { code: "P2025" }),
@@ -82,7 +82,9 @@ describe("DeleteTransactionRepository", () => {
 
     const { sut } = makeSut();
 
-    jest.spyOn(prisma.transaction, "delete").mockRejectedValueOnce(new Error());
+    import.meta.jest
+      .spyOn(prisma.transaction, "delete")
+      .mockRejectedValueOnce(new Error());
 
     const promise = sut.execute(transaction.id);
 

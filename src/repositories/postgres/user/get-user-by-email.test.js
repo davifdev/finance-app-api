@@ -21,7 +21,9 @@ describe("GetUserByEmailRepository", () => {
   it("should if Prisma throws", async () => {
     const { sut } = makeSut();
 
-    jest.spyOn(prisma.user, "findUnique").mockRejectedValueOnce(new Error());
+    import.meta.jest
+      .spyOn(prisma.user, "findUnique")
+      .mockRejectedValueOnce(new Error());
 
     const promise = sut.execute(user.email);
 
@@ -32,7 +34,7 @@ describe("GetUserByEmailRepository", () => {
     const { sut } = makeSut();
     const email = user.email;
 
-    const prismaSpy = jest.spyOn(prisma.user, "findUnique");
+    const prismaSpy = import.meta.jest.spyOn(prisma.user, "findUnique");
 
     await sut.execute(email);
 

@@ -40,7 +40,10 @@ describe("CreateTransactionController", () => {
   it("should call CreateTransactionUseCase with correct params", async () => {
     const { sut, createTransactionUseCase } = makeSut();
 
-    const executeSpy = jest.spyOn(createTransactionUseCase, "execute");
+    const executeSpy = import.meta.jest.spyOn(
+      createTransactionUseCase,
+      "execute",
+    );
 
     await sut.execute(httpRequest);
 
@@ -148,9 +151,11 @@ describe("CreateTransactionController", () => {
   it("should return 500 if ocurs an internal server error", async () => {
     const { sut, createTransactionUseCase } = makeSut();
 
-    jest.spyOn(createTransactionUseCase, "execute").mockImplementation(() => {
-      throw new Error();
-    });
+    import.meta.jest
+      .spyOn(createTransactionUseCase, "execute")
+      .mockImplementation(() => {
+        throw new Error();
+      });
 
     const result = await sut.execute(httpRequest);
 
@@ -160,9 +165,11 @@ describe("CreateTransactionController", () => {
   it("should return 404 if user not found", async () => {
     const { sut, createTransactionUseCase } = makeSut();
 
-    jest.spyOn(createTransactionUseCase, "execute").mockImplementation(() => {
-      throw new UserNotFoundError();
-    });
+    import.meta.jest
+      .spyOn(createTransactionUseCase, "execute")
+      .mockImplementation(() => {
+        throw new UserNotFoundError();
+      });
 
     const result = await sut.execute(httpRequest);
 

@@ -35,7 +35,7 @@ describe("UpdateTransactionUseCase", () => {
     const { sut, updateTransactionRepository } = makeSut();
     const id = faker.string.uuid();
 
-    const updateTransactionRepositorySpy = jest.spyOn(
+    const updateTransactionRepositorySpy = import.meta.jest.spyOn(
       updateTransactionRepository,
       "execute",
     );
@@ -52,7 +52,7 @@ describe("UpdateTransactionUseCase", () => {
     const { sut, updateTransactionRepository } = makeSut();
     const id = faker.string.uuid();
 
-    jest
+    import.meta.jest
       .spyOn(updateTransactionRepository, "execute")
       .mockImplementation(() => {
         throw new Error();

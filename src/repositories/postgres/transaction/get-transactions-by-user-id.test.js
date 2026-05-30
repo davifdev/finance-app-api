@@ -34,7 +34,7 @@ describe("GetTransactionsByUserId", () => {
   it("should call Prisma with correct params", async () => {
     const { sut } = makeSut();
 
-    const prismaSpy = jest.spyOn(prisma.transaction, "findMany");
+    const prismaSpy = import.meta.jest.spyOn(prisma.transaction, "findMany");
 
     await sut.execute(user.id);
 
@@ -49,7 +49,7 @@ describe("GetTransactionsByUserId", () => {
     await prisma.user.create({ data: user });
     const { sut } = makeSut();
 
-    jest
+    import.meta.jest
       .spyOn(prisma.transaction, "findMany")
       .mockRejectedValueOnce(new Error());
 

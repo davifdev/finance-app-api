@@ -26,7 +26,7 @@ describe("DeleteUserRepository", () => {
   it("should call Prisma  with correct params", async () => {
     await prisma.user.create({ data: user });
     const { sut } = makeSut();
-    const prismaSpy = jest.spyOn(prisma.user, "delete");
+    const prismaSpy = import.meta.jest.spyOn(prisma.user, "delete");
 
     await sut.execute(user.id);
 
@@ -40,7 +40,7 @@ describe("DeleteUserRepository", () => {
   it("should throw if DeleteUserRepository throws", async () => {
     const { sut } = makeSut();
 
-    jest.spyOn(prisma.user, "delete").mockImplementation(() => {
+    import.meta.jest.spyOn(prisma.user, "delete").mockImplementation(() => {
       throw new Error();
     });
 
@@ -55,7 +55,7 @@ describe("DeleteUserRepository", () => {
     });
     const { sut } = makeSut();
 
-    jest
+    import.meta.jest
       .spyOn(prisma.user, "delete")
       .mockRejectedValueOnce(
         new PrismaClientKnownRequestError("", { code: "P2025" }),

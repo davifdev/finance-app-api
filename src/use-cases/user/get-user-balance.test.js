@@ -39,7 +39,9 @@ describe("GetUserBalance", () => {
   it("should throw UserNotFoundError if GetUserByIdRepository receives invalid userId", async () => {
     const { sut, getUserByIdRepository } = makeSut();
     const userId = faker.string.uuid;
-    jest.spyOn(getUserByIdRepository, "execute").mockReturnValue(null);
+    import.meta.jest
+      .spyOn(getUserByIdRepository, "execute")
+      .mockReturnValue(null);
 
     const promise = sut.execute(userId);
 
@@ -50,7 +52,7 @@ describe("GetUserBalance", () => {
     const { sut, getUserByIdRepository } = makeSut();
     const userId = faker.string.uuid();
 
-    const executeSpy = jest.spyOn(getUserByIdRepository, "execute");
+    const executeSpy = import.meta.jest.spyOn(getUserByIdRepository, "execute");
 
     await sut.execute(userId);
 
@@ -61,7 +63,10 @@ describe("GetUserBalance", () => {
     const { sut, getUserBalanceRepository } = makeSut();
     const userId = faker.string.uuid();
 
-    const executeSpy = jest.spyOn(getUserBalanceRepository, "execute");
+    const executeSpy = import.meta.jest.spyOn(
+      getUserBalanceRepository,
+      "execute",
+    );
 
     await sut.execute(userId);
 
@@ -71,9 +76,11 @@ describe("GetUserBalance", () => {
   it("should throw if GetUserByIdRepository throws", async () => {
     const { sut, getUserByIdRepository } = makeSut();
 
-    jest.spyOn(getUserByIdRepository, "execute").mockImplementation(() => {
-      throw new Error();
-    });
+    import.meta.jest
+      .spyOn(getUserByIdRepository, "execute")
+      .mockImplementation(() => {
+        throw new Error();
+      });
 
     const promise = sut.execute(faker.string.uuid());
 
@@ -83,9 +90,11 @@ describe("GetUserBalance", () => {
   it("should throw if GetUserBalance throws", async () => {
     const { sut, getUserBalanceRepository } = makeSut();
 
-    jest.spyOn(getUserBalanceRepository, "execute").mockImplementation(() => {
-      throw new Error();
-    });
+    import.meta.jest
+      .spyOn(getUserBalanceRepository, "execute")
+      .mockImplementation(() => {
+        throw new Error();
+      });
 
     const promise = sut.execute(faker.string.uuid());
 

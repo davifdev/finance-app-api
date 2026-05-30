@@ -40,7 +40,7 @@ describe("DeleteUserController", () => {
   it("should call DeleteUserUseCase with correct params", async () => {
     const { sut, deleteUserUseCase } = makeSut();
 
-    const executeSpy = jest.spyOn(deleteUserUseCase, "execute");
+    const executeSpy = import.meta.jest.spyOn(deleteUserUseCase, "execute");
 
     await sut.execute(httpRequest);
 
@@ -58,7 +58,7 @@ describe("DeleteUserController", () => {
   it("should return 404 if user is not found", async () => {
     const { sut, deleteUserUseCase } = makeSut();
 
-    jest
+    import.meta.jest
       .spyOn(deleteUserUseCase, "execute")
       .mockRejectedValueOnce(new UserNotFoundError());
 
@@ -70,9 +70,11 @@ describe("DeleteUserController", () => {
   it("should return 500 if occurs an error", async () => {
     const { sut, deleteUserUseCase } = makeSut();
 
-    jest.spyOn(deleteUserUseCase, "execute").mockImplementation(() => {
-      throw new Error("Server error");
-    });
+    import.meta.jest
+      .spyOn(deleteUserUseCase, "execute")
+      .mockImplementation(() => {
+        throw new Error("Server error");
+      });
 
     const result = await sut.execute(httpRequest);
 

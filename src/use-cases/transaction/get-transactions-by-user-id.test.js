@@ -48,7 +48,7 @@ describe("GetTransactionsByUserIdUseCase", () => {
   it("should call GetUserByIdRepository with correct params", async () => {
     const { sut, getUserByIdRepository } = makeSut();
     const userId = faker.string.uuid();
-    const getUserByIdRepositorySpy = jest.spyOn(
+    const getUserByIdRepositorySpy = import.meta.jest.spyOn(
       getUserByIdRepository,
       "execute",
     );
@@ -61,7 +61,7 @@ describe("GetTransactionsByUserIdUseCase", () => {
   it("should call GetTransactionByUserIdRepository with correct params", async () => {
     const { sut, getTransactionByUserIdRepository } = makeSut();
     const userId = faker.string.uuid();
-    const getTransactionByUserIdRepositorySpy = jest.spyOn(
+    const getTransactionByUserIdRepositorySpy = import.meta.jest.spyOn(
       getTransactionByUserIdRepository,
       "execute",
     );
@@ -75,7 +75,9 @@ describe("GetTransactionsByUserIdUseCase", () => {
     const { sut, getUserByIdRepository } = makeSut();
     const userId = faker.string.uuid();
 
-    jest.spyOn(getUserByIdRepository, "execute").mockResolvedValue(null);
+    import.meta.jest
+      .spyOn(getUserByIdRepository, "execute")
+      .mockResolvedValue(null);
 
     const promise = sut.execute(userId);
 
@@ -85,9 +87,11 @@ describe("GetTransactionsByUserIdUseCase", () => {
   it("should throw if GetUserByIdRepository throws", async () => {
     const { sut, getUserByIdRepository } = makeSut();
 
-    jest.spyOn(getUserByIdRepository, "execute").mockImplementation(() => {
-      throw new Error();
-    });
+    import.meta.jest
+      .spyOn(getUserByIdRepository, "execute")
+      .mockImplementation(() => {
+        throw new Error();
+      });
 
     const promise = sut.execute(faker.string.uuid());
 
@@ -97,7 +101,7 @@ describe("GetTransactionsByUserIdUseCase", () => {
   it("should throw if GetTransactionsByUserIdRepository throws", async () => {
     const { sut, getTransactionByUserIdRepository } = makeSut();
 
-    jest
+    import.meta.jest
       .spyOn(getTransactionByUserIdRepository, "execute")
       .mockImplementation(() => {
         throw new Error();
