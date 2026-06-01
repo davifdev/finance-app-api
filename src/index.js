@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { application } from "express";
+import { app } from "./app.js";
 
-application.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, "0.0.0.0", () => {
   console.log(`Server is running at http://localhost:${process.env.PORT}`);
 });
