@@ -14,7 +14,7 @@
     "prepare": "husky"
   },
   "keywords": [],
-  "author": "",
+  "author": "Davi Fernandes",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
