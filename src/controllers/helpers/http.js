@@ -5,6 +5,15 @@ export function badRequest(body) {
   };
 }
 
+export function unauthorized() {
+  return {
+    statusCode: 401,
+    body: {
+      message: "Unauthorized",
+    },
+  };
+}
+
 export function created(body) {
   return {
     statusCode: 201,
