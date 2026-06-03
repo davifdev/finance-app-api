@@ -3,6 +3,14 @@ import { EmailAlreadyInUser } from "../../errors/user";
 import { user } from "../../__tests__/index.js";
 
 describe("CreateUserUseCase", () => {
+  class TokenGeneratorAdapterStub {
+    async execute() {
+      return {
+        accessToken: "access_token",
+        refreshToken: "refresh_token",
+      };
+    }
+  }
   class GetUserByEmailRepositoryStub {
     async execute() {
       return null;
@@ -31,12 +39,14 @@ describe("CreateUserUseCase", () => {
     const createUserRepository = new CreateUserRepositoryStub();
     const passwordHasherAdapter = new PasswordHasherAdapterStub();
     const idGeneratorAdapter = new IdGeneratorAdapterStub();
+    const tokenGeneratorAdapter = new TokenGeneratorAdapterStub();
 
     const sut = new CreateUserUseCase(
       getUserByEmailRepository,
       createUserRepository,
       passwordHasherAdapter,
       idGeneratorAdapter,
+      tokenGeneratorAdapter,
     );
 
     return {
@@ -54,6 +64,7 @@ describe("CreateUserUseCase", () => {
     const createdUser = await sut.execute(user);
 
     expect(createdUser).toBeTruthy();
+    expect(createdUser).toHaveProperty("tokens");
   });
 
   it("should throw an EmailAlreadyInUser if GetUserByEmailRepository returns a user", async () => {
