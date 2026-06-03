@@ -20,9 +20,11 @@ export class CreateUserController {
       if (error instanceof ZodError) {
         return badRequest({ message: error.issues[0].message });
       }
+
       if (error instanceof EmailAlreadyInUser) {
         return badRequest({ message: error.message });
       }
+
       console.error(error);
       return serverError();
     }

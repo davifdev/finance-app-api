@@ -7,6 +7,7 @@ import {
   makeLoginUserController,
   makeUpdateUserController,
 } from "../factories/controllers/user.js";
+import { auth } from "../middlewares/auth.js";
 
 export const usersRouter = Router();
 
@@ -18,7 +19,15 @@ usersRouter.post("/", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-usersRouter.get("/:userId", async (request, response) => {
+usersRouter.post("/login", async (request, response) => {
+  const loginUserController = makeLoginUserController();
+
+  const { statusCode, body } = await loginUserController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+usersRouter.get("/:userId", auth, async (request, response) => {
   const getUserByIdController = makeGetUserByIdController();
 
   const { statusCode, body } = await getUserByIdController.execute(request);
@@ -26,7 +35,7 @@ usersRouter.get("/:userId", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-usersRouter.get("/:userId/balance", async (request, response) => {
+usersRouter.get("/:userId/balance", auth, async (request, response) => {
   const getUserBalanceController = makeGetUserBalanceController();
 
   const { statusCode, body } = await getUserBalanceController.execute(request);
@@ -34,7 +43,7 @@ usersRouter.get("/:userId/balance", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-usersRouter.patch("/:userId", async (request, response) => {
+usersRouter.patch("/:userId", auth, async (request, response) => {
   const updateUserController = makeUpdateUserController();
 
   const { statusCode, body } = await updateUserController.execute(request);
@@ -42,18 +51,10 @@ usersRouter.patch("/:userId", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-usersRouter.delete("/:userId", async (request, response) => {
+usersRouter.delete("/:userId", auth, async (request, response) => {
   const deleteUserController = makeDeleteUserController();
 
   const { statusCode, body } = await deleteUserController.execute(request);
-
-  response.status(statusCode).json(body);
-});
-
-usersRouter.post("/login", async (request, response) => {
-  const loginUserController = makeLoginUserController();
-
-  const { statusCode, body } = await loginUserController.execute(request);
 
   response.status(statusCode).json(body);
 });
