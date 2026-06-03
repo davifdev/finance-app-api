@@ -14,6 +14,15 @@ export function unauthorized() {
   };
 }
 
+export function forbiden() {
+  return {
+    statusCode: 403,
+    body: {
+      message: "Forbiden",
+    },
+  };
+}
+
 export function created(body) {
   return {
     statusCode: 201,

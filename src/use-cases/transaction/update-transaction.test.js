@@ -12,23 +12,32 @@ describe("UpdateTransactionUseCase", () => {
     }
   }
 
+  class GetTransactionByIdRepositoryStub {
+    async execute() {
+      return transaction;
+    }
+  }
+
   const makeSut = () => {
     const updateTransactionRepository = new UpdateTransactionRepositoryStub();
-    const sut = new UpdateTransactionUseCase(updateTransactionRepository);
+    const getTransactionByIdRepository = new GetTransactionByIdRepositoryStub();
+    const sut = new UpdateTransactionUseCase(
+      updateTransactionRepository,
+      getTransactionByIdRepository,
+    );
 
     return { sut, updateTransactionRepository };
   };
 
   it("should updated transaction successfully", async () => {
     const { sut } = makeSut();
-    const id = faker.string.uuid();
 
-    const result = await sut.execute(id, {
-      name: faker.lorem.words(8),
+    const result = await sut.execute(transaction.id, {
+      name: faker.lorem.words(1),
     });
 
     expect(result).toBeTruthy();
-    expect(result).toStrictEqual({ id, ...transaction });
+    expect(result).toStrictEqual(transaction);
   });
 
   it("should call UpdateTransactionRepository with correct params", async () => {

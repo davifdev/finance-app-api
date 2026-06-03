@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { UpdateTransactionController } from "./update-transaction";
-import { TransactionNotFoundError } from "../../errors";
+import { TransactionForbiden, TransactionNotFoundError } from "../../errors";
 
 describe("UpdateTransactionController", () => {
   const makeSut = () => {
@@ -171,5 +171,17 @@ describe("UpdateTransactionController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(404);
+  });
+
+  it("should return 403 when TransactionForbiden", async () => {
+    const { sut, updateTransactionUseCase } = makeSut();
+
+    import.meta.jest
+      .spyOn(updateTransactionUseCase, "execute")
+      .mockRejectedValue(new TransactionForbiden());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(403);
   });
 });

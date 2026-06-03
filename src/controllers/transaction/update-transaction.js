@@ -7,8 +7,10 @@ import {
   serverError,
   badRequest,
   transactionNotFoundResponse,
+  forbiden,
 } from "../helpers/index.js";
 import { TransactionNotFoundError } from "../../errors/transaction.js";
+import { TransactionForbiden } from "../../errors/user.js";
 
 export class UpdateTransactionController {
   constructor(updateTransactionUseCase) {
@@ -33,13 +35,9 @@ export class UpdateTransactionController {
         params,
       );
 
-      // if (!transaction) {
-      //   return transactionNotFoundResponse();
-      // }
-
       return ok(transaction);
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
       if (error instanceof ZodError) {
         return badRequest({
           message: error.issues[0].message,
@@ -49,6 +47,11 @@ export class UpdateTransactionController {
       if (error instanceof TransactionNotFoundError) {
         return transactionNotFoundResponse();
       }
+
+      if (error instanceof TransactionForbiden) {
+        return forbiden();
+      }
+
       return serverError();
     }
   }

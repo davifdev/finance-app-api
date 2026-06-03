@@ -82,29 +82,38 @@ describe("User Routes E2E Tests", () => {
         id: undefined,
       });
 
-    await request(app).post("/api/transactions").send({
-      user_id: createdUser.id,
-      name: faker.lorem.words(),
-      date: "2026-05-19T18:30:00Z",
-      amount: 8000,
-      type: TransactionType.EARNING,
-    });
+    await request(app)
+      .post("/api/transactions")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send({
+        user_id: createdUser.id,
+        name: faker.lorem.words(),
+        date: "2026-05-19T18:30:00Z",
+        amount: 8000,
+        type: TransactionType.EARNING,
+      });
 
-    await request(app).post("/api/transactions").send({
-      user_id: createdUser.id,
-      name: faker.lorem.words(),
-      date: "2026-05-19T19:30:00Z",
-      amount: 3000,
-      type: TransactionType.EXPENSE,
-    });
+    await request(app)
+      .post("/api/transactions")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send({
+        user_id: createdUser.id,
+        name: faker.lorem.words(),
+        date: "2026-05-19T19:30:00Z",
+        amount: 3000,
+        type: TransactionType.EXPENSE,
+      });
 
-    await request(app).post("/api/transactions").send({
-      user_id: createdUser.id,
-      name: faker.lorem.words(),
-      date: "2026-05-19T17:30:00Z",
-      amount: 2000,
-      type: TransactionType.INVESTMENT,
-    });
+    await request(app)
+      .post("/api/transactions")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send({
+        user_id: createdUser.id,
+        name: faker.lorem.words(),
+        date: "2026-05-19T17:30:00Z",
+        amount: 2000,
+        type: TransactionType.INVESTMENT,
+      });
 
     const response = await request(app)
       .get(`/api/users/balance`)

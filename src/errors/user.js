@@ -17,3 +17,10 @@ export class InvalidPasswordError extends Error {
     this.name = "InvalidPasswordError";
   }
 }
+
+export class TransactionForbiden extends Error {
+  constructor() {
+    super("Forbiden");
+    this.name = "TransactionForbiden";
+  }
+}
