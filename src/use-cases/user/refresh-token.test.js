@@ -1,5 +1,5 @@
-import { UnauthorizedError } from "../../errors";
-import { RefreshTokenUseCase } from "./refresh-token";
+import { UnauthorizedError } from "../../errors/user.js";
+import { RefreshTokenUseCase } from "./refresh-token.js";
 
 describe("RefreshTokenUseCase", () => {
   class TokensGeneratorAdapterStub {
@@ -51,10 +51,12 @@ describe("RefreshTokenUseCase", () => {
 
     import.meta.jest
       .spyOn(tokenVerifierAdapter, "execute")
-      .mockReturnValue(null);
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
 
-    const promise = sut.execute(refreshToken);
-
-    expect(promise).rejects.toThrow(new UnauthorizedError());
+    await expect(() => sut.execute(refreshToken)).toThrow(
+      new UnauthorizedError(),
+    );
   });
 });
