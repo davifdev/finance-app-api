@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { usersRouter, transactionsRouter } from "./routes/index.js";
 import swaggerUi from "swagger-ui-express";

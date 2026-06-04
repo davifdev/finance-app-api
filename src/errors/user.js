@@ -10,17 +10,21 @@ export class UserNotFoundError extends Error {
     this.name = "UserNotFounError";
   }
 }
-
 export class InvalidPasswordError extends Error {
   constructor() {
     super("Invalid password.");
     this.name = "InvalidPasswordError";
   }
 }
-
 export class TransactionForbiden extends Error {
   constructor() {
     super("Forbiden");
     this.name = "TransactionForbiden";
+  }
+}
+export class UnauthorizedError extends Error {
+  constructor() {
+    super("Unauthorized");
+    this.name = "UnauthorizedError";
   }
 }
