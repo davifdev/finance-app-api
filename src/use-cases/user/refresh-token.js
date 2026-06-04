@@ -6,16 +6,17 @@ export class RefreshTokenUseCase {
     this.tokenVerifierAdapter = tokenVerifierAdapter;
   }
 
-  async execute(refreshToken) {
-    const decodedToken = this.tokenVerifierAdapter.execute(
-      refreshToken,
-      process.env.JWT_REFRESH_TOKEN_SECRET_KEY,
-    );
+  execute(refreshToken) {
+    try {
+      const decodedToken = this.tokenVerifierAdapter.execute(
+        refreshToken,
+        process.env.JWT_REFRESH_TOKEN_SECRET_KEY,
+      );
 
-    if (!decodedToken) {
+      return this.tokensGeneratorAdapter.execute(decodedToken.userId);
+    } catch (error) {
+      console.error(error);
       throw new UnauthorizedError();
     }
-
-    return this.tokensGeneratorAdapter.execute(decodedToken.userId);
   }
 }

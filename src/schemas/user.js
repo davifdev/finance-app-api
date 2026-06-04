@@ -33,3 +33,9 @@ export const loginUserSchema = z.object({
     .trim()
     .min(6, "password must have at least 6 characters"),
 });
+
+export const refreshTokenSchema = z.object({
+  refreshToken: z.string("please provide a valid token").trim().min(1, {
+    message: "refresh token is required",
+  }),
+});
