@@ -3,6 +3,9 @@ import { GetTransactionByUserIdController } from "./get-transaction-by-user-id";
 import { UserNotFoundError } from "../../errors/user";
 
 describe("GetTransactionByUserIdController", () => {
+  const from = "2024-01-01";
+  const to = "2026-02-01";
+
   const makeSut = () => {
     class GetTransactionByUserIdUseCaseStub {
       async execute(transaction) {
@@ -22,6 +25,8 @@ describe("GetTransactionByUserIdController", () => {
   const httpRequest = {
     query: {
       userId: faker.string.uuid(),
+      from,
+      to,
     },
   };
 
@@ -43,7 +48,11 @@ describe("GetTransactionByUserIdController", () => {
 
     await sut.execute(httpRequest);
 
-    expect(executeSpy).toHaveBeenCalledWith(httpRequest.query.userId);
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.query.userId,
+      httpRequest.query.from,
+      httpRequest.query.to,
+    );
   });
 
   it("should return 400 if user id is missing", async () => {

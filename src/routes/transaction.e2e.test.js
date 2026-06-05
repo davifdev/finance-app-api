@@ -3,6 +3,9 @@ import { app } from "../app.js";
 import { user } from "../__tests__/fixtures/user.js";
 
 describe("Transaction Routes E2E Test", () => {
+  const from = "2024-01-01";
+  const to = "2026-02-01";
+
   it("POST /api/transactions should return 201 when creating a transaction successfully", async () => {
     const { body: createdUser } = await request(app)
       .post("/api/users")
@@ -46,7 +49,7 @@ describe("Transaction Routes E2E Test", () => {
       });
 
     const response = await request(app)
-      .get(`/api/transactions`)
+      .get(`/api/transactions?from=${from}&to=${to}`)
       .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`);
 
     expect(response.status).toBe(200);
