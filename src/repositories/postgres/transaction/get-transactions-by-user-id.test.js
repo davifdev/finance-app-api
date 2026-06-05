@@ -4,6 +4,9 @@ import { PostgresGetTransactionByUserIdRepository } from "./get-transactions-by-
 import dayjs from "dayjs";
 
 describe("GetTransactionsByUserId", () => {
+  const from = "2024-01-01";
+  const to = "2026-02-01";
+
   const makeSut = () => {
     const sut = new PostgresGetTransactionByUserIdRepository();
 
@@ -17,7 +20,7 @@ describe("GetTransactionsByUserId", () => {
       data: { ...transaction, user_id: user.id },
     });
 
-    const result = await sut.execute(user.id);
+    const result = await sut.execute(user.id, from, to);
 
     expect(result[0].id).toBe(transaction.id);
     expect(result[0].user_id).toBe(user.id);
@@ -36,11 +39,15 @@ describe("GetTransactionsByUserId", () => {
 
     const prismaSpy = import.meta.jest.spyOn(prisma.transaction, "findMany");
 
-    await sut.execute(user.id);
+    await sut.execute(user.id, from, to);
 
     expect(prismaSpy).toHaveBeenCalledWith({
       where: {
         user_id: user.id,
+        date: {
+          gte: new Date(from),
+          lte: new Date(to),
+        },
       },
     });
   });

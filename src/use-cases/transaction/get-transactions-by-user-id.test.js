@@ -5,6 +5,8 @@ import { transaction, user } from "../../__tests__/index.js";
 
 describe("GetTransactionsByUserIdUseCase", () => {
   const user_id = faker.string.uuid();
+  const from = "2024-01-01";
+  const to = "2026-02-01";
 
   const transactions = [
     {
@@ -61,8 +63,6 @@ describe("GetTransactionsByUserIdUseCase", () => {
   it("should call GetTransactionByUserIdRepository with correct params", async () => {
     const { sut, getTransactionByUserIdRepository } = makeSut();
     const userId = faker.string.uuid();
-    const from = "2024-01-01";
-    const to = "2026-02-01";
     const getTransactionByUserIdRepositorySpy = import.meta.jest.spyOn(
       getTransactionByUserIdRepository,
       "execute",
