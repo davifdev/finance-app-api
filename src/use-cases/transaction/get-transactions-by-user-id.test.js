@@ -61,14 +61,20 @@ describe("GetTransactionsByUserIdUseCase", () => {
   it("should call GetTransactionByUserIdRepository with correct params", async () => {
     const { sut, getTransactionByUserIdRepository } = makeSut();
     const userId = faker.string.uuid();
+    const from = "2024-01-01";
+    const to = "2026-02-01";
     const getTransactionByUserIdRepositorySpy = import.meta.jest.spyOn(
       getTransactionByUserIdRepository,
       "execute",
     );
 
-    await sut.execute(userId);
+    await sut.execute(userId, from, to);
 
-    expect(getTransactionByUserIdRepositorySpy).toHaveBeenCalledWith(userId);
+    expect(getTransactionByUserIdRepositorySpy).toHaveBeenCalledWith(
+      userId,
+      from,
+      to,
+    );
   });
 
   it("should throw UserNotFoundError if user does not exist", async () => {
