@@ -2,7 +2,7 @@ import validator from "validator";
 import z from "zod";
 
 export const createTransactionSchema = z.object({
-  user_id: z.uuid("user id must be a valid id").min(1, "user_id is required"),
+  user_id: z.uuid("user_id must be a valid id").min(1, "user_id is required"),
   name: z.string("name is required").trim().min(1, "name is required"),
   date: z
     .string("data is required")
@@ -29,3 +29,9 @@ export const updateTransactionSchema = createTransactionSchema
   .strict({
     message: "Some provided field is not allowed.",
   });
+
+export const getTransactionByUserIdSchema = z.object({
+  user_id: z.uuid("user_id must be a valid id").min(1, "user_id is required"),
+  from: z.string().date(),
+  to: z.string().date(),
+});
