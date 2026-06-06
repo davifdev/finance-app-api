@@ -600,21 +600,33 @@
     "UserBalance": {
       "type": "object",
       "properties": {
-        "earning": {
+        "earnings": {
           "type": "string",
-          "example": "1000"
+          "example": "8000"
         },
         "expense": {
           "type": "string",
-          "example": "1000"
+          "example": "3000"
         },
         "investment": {
           "type": "string",
-          "example": "1000"
+          "example": "2000"
+        },
+        "earningsPercentage": {
+          "type": "string",
+          "example": "61"
+        },
+        "expensesPercentage": {
+          "type": "string",
+          "example": "23"
+        },
+        "investmentPercentage": {
+          "type": "string",
+          "example": "15"
         },
         "balance": {
           "type": "string",
-          "example": "3000"
+          "example": "2000"
         }
       }
     },
