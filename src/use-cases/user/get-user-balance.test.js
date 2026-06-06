@@ -32,7 +32,7 @@ describe("GetUserBalance", () => {
   it("should get user balance successfully", async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute(faker.string.uuid);
+    const result = await sut.execute(faker.string.uuid, from, to);
 
     expect(result).toBeTruthy();
     expect(result).toStrictEqual(balance);
@@ -45,7 +45,7 @@ describe("GetUserBalance", () => {
       .spyOn(getUserByIdRepository, "execute")
       .mockReturnValue(null);
 
-    const promise = sut.execute(userId);
+    const promise = sut.execute(userId, from, to);
 
     expect(promise).rejects.toThrow(new UserNotFoundError(userId));
   });
@@ -56,7 +56,7 @@ describe("GetUserBalance", () => {
 
     const executeSpy = import.meta.jest.spyOn(getUserByIdRepository, "execute");
 
-    await sut.execute(userId);
+    await sut.execute(userId, from, to);
 
     expect(executeSpy).toHaveBeenCalledWith(userId);
   });
@@ -84,7 +84,7 @@ describe("GetUserBalance", () => {
         throw new Error();
       });
 
-    const promise = sut.execute(faker.string.uuid());
+    const promise = sut.execute(faker.string.uuid(), from, to);
 
     await expect(promise).rejects.toThrow();
   });
@@ -98,7 +98,7 @@ describe("GetUserBalance", () => {
         throw new Error();
       });
 
-    const promise = sut.execute(faker.string.uuid());
+    const promise = sut.execute(faker.string.uuid(), from, to);
 
     await expect(promise).rejects.toThrow();
   });
