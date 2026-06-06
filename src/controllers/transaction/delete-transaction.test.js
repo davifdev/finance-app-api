@@ -19,6 +19,7 @@ describe("DeleteTransactionController", () => {
   const httpRequest = {
     params: {
       transactionId: faker.string.uuid(),
+      user_id: faker.string.uuid(),
     },
   };
 
@@ -40,7 +41,10 @@ describe("DeleteTransactionController", () => {
 
     await sut.execute(httpRequest);
 
-    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.transactionId);
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.params.transactionId,
+      httpRequest.params.user_id,
+    );
   });
 
   it("should return 400 if transaction id is invalid", async () => {
