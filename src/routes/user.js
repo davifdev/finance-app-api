@@ -12,6 +12,36 @@ import { auth } from "../middlewares/auth.js";
 
 export const usersRouter = Router();
 
+usersRouter.get("/me", auth, async (request, response) => {
+  const getUserByIdController = makeGetUserByIdController();
+
+  const { statusCode, body } = await getUserByIdController.execute({
+    ...request,
+    params: {
+      userId: request.userId,
+    },
+  });
+
+  response.status(statusCode).json(body);
+});
+
+usersRouter.get("/me/balance", auth, async (request, response) => {
+  const getUserBalanceController = makeGetUserBalanceController();
+
+  const { statusCode, body } = await getUserBalanceController.execute({
+    ...request,
+    params: {
+      userId: request.userId,
+    },
+    query: {
+      from: request.query.from,
+      to: request.query.to,
+    },
+  });
+
+  response.status(statusCode).json(body);
+});
+
 usersRouter.post("/", async (request, response) => {
   const createUserController = makeCreateUserController();
 
@@ -36,37 +66,7 @@ usersRouter.post("/refresh-token", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-usersRouter.get("/", auth, async (request, response) => {
-  const getUserByIdController = makeGetUserByIdController();
-
-  const { statusCode, body } = await getUserByIdController.execute({
-    ...request,
-    params: {
-      userId: request.userId,
-    },
-  });
-
-  response.status(statusCode).json(body);
-});
-
-usersRouter.get("/balance", auth, async (request, response) => {
-  const getUserBalanceController = makeGetUserBalanceController();
-
-  const { statusCode, body } = await getUserBalanceController.execute({
-    ...request,
-    params: {
-      userId: request.userId,
-    },
-    query: {
-      from: request.query.from,
-      to: request.query.to,
-    },
-  });
-
-  response.status(statusCode).json(body);
-});
-
-usersRouter.patch("/", auth, async (request, response) => {
+usersRouter.patch("/me", auth, async (request, response) => {
   const updateUserController = makeUpdateUserController();
 
   const { statusCode, body } = await updateUserController.execute({
@@ -79,7 +79,7 @@ usersRouter.patch("/", auth, async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-usersRouter.delete("/", auth, async (request, response) => {
+usersRouter.delete("/me", auth, async (request, response) => {
   const deleteUserController = makeDeleteUserController();
 
   const { statusCode, body } = await deleteUserController.execute({
