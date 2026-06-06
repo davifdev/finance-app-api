@@ -20,33 +20,6 @@
   ],
   "paths": {
     "/api/users": {
-      "get": {
-        "summary": "Get authenticated user",
-        "tags": ["User"],
-        "responses": {
-          "200": {
-            "description": "User found",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "404": {
-            "schema": {
-              "$ref": "#/definitions/UserNotFound"
-            }
-          },
-          "500": {
-            "schema": {
-              "$ref": "#/definitions/InternalServerErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ]
-      },
       "post": {
         "summary": "Create a new User",
         "tags": ["User"],
@@ -79,25 +52,25 @@
             }
           }
         }
-      },
-      "delete": {
-        "summary": "Delete authenticated user ",
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "summary": "Get authenticated user",
         "tags": ["User"],
         "responses": {
           "200": {
-            "description": "User deleted successfully",
+            "description": "User found",
             "schema": {
               "$ref": "#/definitions/User"
             }
           },
           "404": {
-            "description": "User not found",
             "schema": {
               "$ref": "#/definitions/UserNotFound"
             }
           },
           "500": {
-            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/InternalServerErrorResponse"
             }
@@ -133,6 +106,35 @@
             "description": "Invalid Param",
             "schema": {
               "$ref": "#/definitions/InvalidParamResponse"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete authenticated user ",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
             }
           },
           "404": {
@@ -225,7 +227,7 @@
         }
       }
     },
-    "/api/users/balance": {
+    "/api/users/me/balance": {
       "get": {
         "summary": "Get user balance",
         "tags": ["User"],
@@ -278,7 +280,7 @@
         ]
       }
     },
-    "/api/transactions": {
+    "/api/transactions/me": {
       "get": {
         "summary": "Get authenticated user transaction",
         "tags": ["Transactions"],
@@ -385,9 +387,9 @@
         ]
       }
     },
-    "/api/transaction/{transactionId}": {
+    "/api/transaction/me/{transactionId}": {
       "patch": {
-        "summary": "Update transaction by ID",
+        "summary": "Update transaction by ID of the authenticated user",
         "tags": ["Transactions"],
         "parameters": [
           {
@@ -439,7 +441,7 @@
         ]
       },
       "delete": {
-        "summary": "Delete transaction",
+        "summary": "Delete transaction of the authenticated user",
         "tags": ["Transactions"],
         "parameters": [
           {
