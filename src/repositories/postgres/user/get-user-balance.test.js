@@ -5,6 +5,8 @@ import { PostgresGetUserBalanceRepository } from "./get-user-balance.js";
 import { TransactionType } from "../../../../generated/prisma/index.js";
 
 describe("GetUserBalanceRepository", () => {
+  const from = "2024-01-01";
+  const to = "2026-02-01";
   const makeSut = () => {
     const sut = new PostgresGetUserBalanceRepository();
 
@@ -18,14 +20,14 @@ describe("GetUserBalanceRepository", () => {
     await prisma.transaction.createMany({
       data: [
         {
-          date: faker.date.past().toISOString(),
+          date: new Date(from),
           name: faker.lorem.words(1),
           amount: 5000,
           type: "EARNING",
           user_id: user.id,
         },
         {
-          date: faker.date.past().toISOString(),
+          date: new Date(from),
           name: faker.lorem.words(1),
           amount: 5000,
           type: "EARNING",
@@ -33,28 +35,28 @@ describe("GetUserBalanceRepository", () => {
         },
 
         {
-          date: faker.date.past().toISOString(),
+          date: new Date(from),
           name: faker.lorem.words(1),
           amount: 1000,
           type: "EXPENSE",
           user_id: user.id,
         },
         {
-          date: faker.date.past().toISOString(),
+          date: new Date(from),
           name: faker.lorem.words(1),
           amount: 1000,
           type: "EXPENSE",
           user_id: user.id,
         },
         {
-          date: faker.date.past().toISOString(),
+          date: new Date(from),
           name: faker.lorem.words(1),
           amount: 3000,
           type: "INVESTMENT",
           user_id: user.id,
         },
         {
-          date: faker.date.past().toISOString(),
+          date: new Date(from),
           name: faker.lorem.words(1),
           amount: 3000,
           type: "INVESTMENT",
@@ -63,7 +65,7 @@ describe("GetUserBalanceRepository", () => {
       ],
     });
 
-    const result = await sut.execute(user.id);
+    const result = await sut.execute(user.id, from, to);
 
     expect(result.earnings.toString()).toBe("10000");
     expect(result.expense.toString()).toBe("2000");
@@ -78,7 +80,7 @@ describe("GetUserBalanceRepository", () => {
       .spyOn(prisma.transaction, "aggregate")
       .mockRejectedValueOnce(new Error());
 
-    const promise = sut.execute(fixturesUser.id);
+    const promise = sut.execute(fixturesUser.id, from, to);
 
     await expect(promise).rejects.toThrow();
   });
@@ -88,13 +90,17 @@ describe("GetUserBalanceRepository", () => {
 
     const prismaSpy = import.meta.jest.spyOn(prisma.transaction, "aggregate");
 
-    await sut.execute(fixturesUser.id);
+    await sut.execute(fixturesUser.id, from, to);
 
     expect(prismaSpy).toHaveBeenCalledTimes(3);
     expect(prismaSpy).toHaveBeenCalledWith({
       where: {
         user_id: fixturesUser.id,
         type: TransactionType.EXPENSE,
+        date: {
+          gte: new Date(from),
+          lte: new Date(to),
+        },
       },
       _sum: {
         amount: true,
@@ -104,6 +110,10 @@ describe("GetUserBalanceRepository", () => {
       where: {
         user_id: fixturesUser.id,
         type: TransactionType.EARNING,
+        date: {
+          gte: new Date(from),
+          lte: new Date(to),
+        },
       },
       _sum: {
         amount: true,
@@ -113,6 +123,10 @@ describe("GetUserBalanceRepository", () => {
       where: {
         user_id: fixturesUser.id,
         type: TransactionType.INVESTMENT,
+        date: {
+          gte: new Date(from),
+          lte: new Date(to),
+        },
       },
       _sum: {
         amount: true,
