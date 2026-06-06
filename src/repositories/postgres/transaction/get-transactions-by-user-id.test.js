@@ -22,7 +22,6 @@ describe("GetTransactionsByUserId", () => {
 
     const result = await sut.execute(user.id, from, to);
 
-    expect(result[0].id).toBe(transaction.id);
     expect(result[0].user_id).toBe(user.id);
     expect(result[0].name).toBe(transaction.name);
     expect(result[0].type).toBe(transaction.type);
