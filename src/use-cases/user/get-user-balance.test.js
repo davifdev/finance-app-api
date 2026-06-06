@@ -4,6 +4,8 @@ import { UserNotFoundError } from "../../errors/user";
 import { balance, user } from "../../__tests__/index.js";
 
 describe("GetUserBalance", () => {
+  const from = "2024-01-01";
+  const to = "2026-02-01";
   const makeSut = () => {
     class GetUserBalanceRepositoryStub {
       async execute() {
@@ -68,9 +70,9 @@ describe("GetUserBalance", () => {
       "execute",
     );
 
-    await sut.execute(userId);
+    await sut.execute(userId, from, to);
 
-    expect(executeSpy).toHaveBeenCalledWith(userId);
+    expect(executeSpy).toHaveBeenCalledWith(userId, from, to);
   });
 
   it("should throw if GetUserByIdRepository throws", async () => {

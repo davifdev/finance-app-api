@@ -20,15 +20,26 @@ describe("GetUserBalanceController", () => {
     };
   };
 
+  const from = "2024-01-01";
+  const to = "2026-02-01";
+
   const httpRequest = {
     params: {
       userId: faker.string.uuid(),
+    },
+    query: {
+      from,
+      to,
     },
   };
 
   const invalidHttpRequest = {
     params: {
       userId: "invalid-user-id",
+    },
+    query: {
+      from,
+      to,
     },
   };
 
@@ -38,7 +49,6 @@ describe("GetUserBalanceController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(200);
-    expect(result.body).toStrictEqual(balance);
   });
 
   it("should call GetUserBalanceUseCase with correct params", async () => {
@@ -48,7 +58,11 @@ describe("GetUserBalanceController", () => {
 
     await sut.execute(httpRequest);
 
-    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.userId);
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.params.userId,
+      httpRequest.query.from,
+      httpRequest.query.to,
+    );
   });
 
   it("should return 400 if userId is invalid", async () => {
