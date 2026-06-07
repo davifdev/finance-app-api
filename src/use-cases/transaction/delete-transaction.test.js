@@ -3,46 +3,53 @@ import { DeleteTransactionUseCase } from "./delete-transaction,";
 import { transaction } from "../../__tests__/index.js";
 
 describe("DeleteTransactionUseCase", () => {
+  const user_id = faker.string.uuid();
   class DeleteTransactionRepositoryStub {
-    async execute(transactionId) {
-      return { ...transaction, id: transactionId };
+    async execute() {
+      return { ...transaction, user_id };
+    }
+  }
+
+  class GetTransactionByIdRepositoryStub {
+    async execute() {
+      return { ...transaction, user_id };
     }
   }
 
   const makeSut = () => {
+    const getTransactionByIdRepository = new GetTransactionByIdRepositoryStub();
     const deleteTransactionRepository = new DeleteTransactionRepositoryStub();
-    const sut = new DeleteTransactionUseCase(deleteTransactionRepository);
+    const sut = new DeleteTransactionUseCase(
+      deleteTransactionRepository,
+      getTransactionByIdRepository,
+    );
 
     return {
       deleteTransactionRepository,
+      getTransactionByIdRepository,
       sut,
     };
   };
 
   it("should deleted transaction successfully", async () => {
     const { sut } = makeSut();
-    const transactionId = faker.string.uuid();
-    const result = await sut.execute(transactionId);
+    const result = await sut.execute(transaction.id, user_id);
 
     expect(result).toBeTruthy();
-    expect(result).toStrictEqual({
-      ...transaction,
-      id: transactionId,
-    });
+    expect(result).toStrictEqual({ ...transaction, user_id });
   });
 
   it("should call DeleteTransactionRepository with correct params", async () => {
     const { sut, deleteTransactionRepository } = makeSut();
-    const transactionId = faker.string.uuid();
 
     const deleteTransactionSpy = import.meta.jest.spyOn(
       deleteTransactionRepository,
       "execute",
     );
 
-    await sut.execute(transactionId);
+    await sut.execute(transaction.id, user_id);
 
-    expect(deleteTransactionSpy).toHaveBeenCalledWith(transactionId);
+    expect(deleteTransactionSpy).toHaveBeenCalledWith(transaction.id);
   });
 
   it("should throw if DeleteTransactionRepository throws", async () => {
@@ -54,7 +61,7 @@ describe("DeleteTransactionUseCase", () => {
         throw new Error();
       });
 
-    const promise = sut.execute(faker.string.uuid());
+    const promise = sut.execute(transaction.id, user_id);
 
     expect(promise).rejects.toThrow();
   });

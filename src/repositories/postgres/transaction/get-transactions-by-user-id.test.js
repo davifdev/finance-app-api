@@ -13,24 +13,33 @@ describe("GetTransactionsByUserId", () => {
     return { sut };
   };
 
+  const newTransaction = {
+    ...transaction,
+    date: new Date(from),
+  };
+
   it("should get a transaction by user id on db", async () => {
     const { sut } = makeSut();
     await prisma.user.create({ data: user });
     await prisma.transaction.create({
-      data: { ...transaction, user_id: user.id },
+      data: { ...transaction, date: new Date(from), user_id: user.id },
     });
 
     const result = await sut.execute(user.id, from, to);
 
     expect(result[0].user_id).toBe(user.id);
-    expect(result[0].name).toBe(transaction.name);
-    expect(result[0].type).toBe(transaction.type);
-    expect(result[0].amount.toString()).toBe(transaction.amount.toString());
+    expect(result[0].name).toBe(newTransaction.name);
+    expect(result[0].type).toBe(newTransaction.type);
+    expect(result[0].amount.toString()).toBe(newTransaction.amount.toString());
     expect(dayjs(result[0].date).daysInMonth()).toBe(
-      dayjs(transaction.date).daysInMonth(),
+      dayjs(newTransaction.date).daysInMonth(),
     );
-    expect(dayjs(result[0].date).month()).toBe(dayjs(transaction.date).month());
-    expect(dayjs(result[0].date).year()).toBe(dayjs(transaction.date).year());
+    expect(dayjs(result[0].date).month()).toBe(
+      dayjs(newTransaction.date).month(),
+    );
+    expect(dayjs(result[0].date).year()).toBe(
+      dayjs(newTransaction.date).year(),
+    );
   });
 
   it("should call Prisma with correct params", async () => {
