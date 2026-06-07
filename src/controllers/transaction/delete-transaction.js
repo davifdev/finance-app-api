@@ -32,6 +32,7 @@ export class DeleteTransactionController {
 
       return ok(transaction);
     } catch (error) {
+      console.log(error);
       if (error instanceof TransactionNotFoundError) {
         return transactionNotFoundResponse();
       }
