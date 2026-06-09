@@ -2,12 +2,6 @@
 
 Uma aplicação de API REST para gerenciamento de finanças pessoais, construída com arquitetura em camadas, padrões de projeto avançados e boas práticas de desenvolvimento.
 
-**Autor:** Davi Fernandes  
-**Versão:** 1.0.0  
-**Licença:** ISC
-
----
-
 ## 📋 Índice
 
 - [Visão Geral](#visão-geral)
@@ -36,14 +30,15 @@ A Finance App API é uma aplicação backend para gerenciar:
 
 ✅ Autenticação e autorização via JWT  
 ✅ Validação de dados com Zod  
-✅ Testes unitários e e2e com Jest  
+✅ Testes unitários e e2e com Jest & Supertest 
 ✅ Arquitetura em camadas bem definida  
 ✅ Padrões de projeto (Factory, Adapter, Repository)  
 ✅ Documentação Swagger 
 ✅ Suporte a CORS  
 ✅ Gerenciamento de banco de dados com Prisma ORM  
 ✅ Linting e formatação de código  
-✅ Git hooks com Husky e Lint-staged  
+✅ Git hooks com Husky e Lint-staged
+✅ CI/CD com GitHub Actions
 
 ---
 
@@ -232,8 +227,10 @@ export const makeCreateUserController = () => {
     idGeneratorAdapter,
     tokensGeneratorAdapter,
   );
+
+  const createUserController = new CreateUserController(createUserUseCase);
   
-  return new CreateUserController(createUserUseCase);
+  return createUserController;
 };
 ```
 
@@ -497,7 +494,7 @@ JWT_ACCESS_TOKEN_SECRET_KEY=sua_chave_secreta_aqui
 JWT_REFRESH_TOKEN_SECRET_KEY=sua_chave_refresh_secreta_aqui
 
 # Database URL
-DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
+DATABASE_URL=postgresql://root:password@localhost:5432/financeapp
 ```
 
 ### Passo 4: Iniciar o Banco de Dados
@@ -938,99 +935,6 @@ MAJOR.MINOR.PATCH
 
 ---
 
-## 🔒 Modelo de Dados
-
-### Tabela: User
-
-```sql
-CREATE TABLE "User" (
-  id          UUID PRIMARY KEY DEFAULT uuid(),
-  first_name  VARCHAR(50) NOT NULL,
-  last_name   VARCHAR(50) NOT NULL,
-  email       VARCHAR(100) NOT NULL UNIQUE,
-  password    VARCHAR(100) NOT NULL,
-  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-**Campos:**
-- `id` (UUID): Identificador único
-- `first_name` (String): Primeiro nome
-- `last_name` (String): Último nome
-- `email` (String): Email único para login
-- `password` (String): Senha criptografada
-
-### Tabela: Transaction
-
-```sql
-CREATE TABLE "Transaction" (
-  id      UUID PRIMARY KEY DEFAULT uuid(),
-  user_id UUID NOT NULL FOREIGN KEY REFERENCES "User"(id) ON DELETE CASCADE,
-  name    VARCHAR(50) NOT NULL,
-  date    DATE NOT NULL,
-  amount  DECIMAL(10, 2) NOT NULL,
-  type    ENUM('EARNING', 'EXPENSE', 'INVESTMENT') NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-**Campos:**
-- `id` (UUID): Identificador único
-- `user_id` (UUID): Referência ao usuário
-- `name` (String): Descrição da transação
-- `date` (Date): Data da transação
-- `amount` (Decimal): Valor da transação
-- `type` (Enum): Tipo (EARNING, EXPENSE, INVESTMENT)
-
-**Relacionamento:**
-- Uma transação pertence a um usuário
-- Um usuário pode ter muitas transações
-- Deletar um usuário deleta suas transações (CASCADE)
-
----
-
-## 🐛 Troubleshooting
-
-### Erro: "Database connection failed"
-
-```
-Solução:
-1. Verifique se o Docker está rodando
-2. Verifique variáveis de ambiente em .env
-3. Verifique se a porta 5432 está disponível
-4. Execute: docker-compose up -d
-```
-
-### Erro: "Migration failed"
-
-```
-Solução:
-1. Verifique se o banco de dados existe
-2. Execute: npx prisma migrate reset (cuidado: deleta dados!)
-3. Execute: npx prisma migrate dev
-```
-
-### Erro: "JWT verification failed"
-
-```
-Solução:
-1. Verifique se JWT_ACCESS_TOKEN_SECRET_KEY está configurado
-2. Verifique se o token não expirou
-3. Verifique o formato do header: "Authorization: Bearer <token>"
-```
-
-### Erro: "Port 3000 already in use"
-
-```
-Solução:
-1. Mude a porta em .env: PORT=3001
-2. Ou mate o processo: lsof -ti:3000 | xargs kill -9
-```
-
----
-
 ## 📖 Referências e Recursos
 
 ### Documentação Oficial
@@ -1057,12 +961,6 @@ Solução:
 
 - GitHub: [davifdev](https://github.com)
 - Email: davi.fer159@gmail.com
-
----
-
-## 📝 Licença
-
-Este projeto está licenciado sob a Licença ISC - veja o arquivo `package.json` para detalhes.
 
 ---
 
